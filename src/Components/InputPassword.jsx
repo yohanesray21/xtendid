@@ -9,7 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { IoKey, IoEye } from "react-icons/io5";
 
-function InputPassword() {
+function InputPassword(props) {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
@@ -25,6 +25,7 @@ function InputPassword() {
           placeholder="Password"
           bgColor="gray.100"
           type={showPassword ? "text" : "password"}
+          {...props}
         />
         <InputRightElement
           color="black"
