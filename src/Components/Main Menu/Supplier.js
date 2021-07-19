@@ -8,7 +8,6 @@ import {
   ButtonGroup,
   Container,
   Flex,
-  FormControl,
   HStack,
   Icon,
   IconButton,
@@ -19,20 +18,12 @@ import {
   Text,
   Thead,
   Tr,
-  Td,
   Th,
-  Tbody,
-  Tfoot,
   Center,
   VStack,
 } from "@chakra-ui/react";
 import TopBar from "../Navigation/TopBar";
-import {
-  AddIcon,
-  ArrowForwardIcon,
-  ChevronRightIcon,
-  EmailIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { ImUserPlus } from "react-icons/im";
 import { IoFilter, IoHome } from "react-icons/io5";
 import ModalSupplier from "../ModalSupplier";

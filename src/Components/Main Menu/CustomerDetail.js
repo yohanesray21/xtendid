@@ -21,7 +21,7 @@ import TopBar from "../Navigation/TopBar";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { IoHome, IoPrintSharp } from "react-icons/io5";
 import MenuIcon from "../MenuIcon";
-function SupplierDetail() {
+function CustomerDetail() {
   return (
     <>
       <TopBar />
@@ -79,7 +79,7 @@ function SupplierDetail() {
             pb={8}
           >
             <Heading size="md" fontWeight="semibold" pt={8} pb={2}>
-              New Supplier
+              New Customer
             </Heading>
             <Box pb={2}>
               <hr />
@@ -92,7 +92,7 @@ function SupplierDetail() {
                   <FormControl>
                     <FormLabel>
                       <Text fontSize="sm" pt={2}>
-                        Supplier Name
+                        Customer Name
                       </Text>
                     </FormLabel>
                     <Input size="sm" bgColor="gray.200" isRequired />
@@ -150,7 +150,7 @@ function SupplierDetail() {
                   <FormControl>
                     <FormLabel>
                       <Text fontSize="sm" pt={2}>
-                        Supplier ID
+                        Customer ID
                       </Text>
                     </FormLabel>
                     <Input size="sm" bgColor="gray.200" isRequired />
@@ -188,7 +188,7 @@ function SupplierDetail() {
             <FormControl px={2}>
               <FormLabel>
                 <Text fontSize="sm" pt={2}>
-                  Website
+                  Taxpayer Identification Number (NPWP)
                 </Text>
               </FormLabel>
               <Input size="sm" bgColor="gray.200" isRequired />
@@ -198,7 +198,15 @@ function SupplierDetail() {
                 <Stack p={2}>
                   <FormControl>
                     <FormLabel>
-                      <Text fontSize="sm">Bank Account Number</Text>
+                      <Text fontSize="sm">National Identity Number (NIK)</Text>
+                    </FormLabel>
+                    <Input size="sm" bgColor="gray.200" />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>
+                      <Text fontSize="sm">
+                        Address Of Taxpayer Identification Number
+                      </Text>
                     </FormLabel>
                     <Input size="sm" bgColor="gray.200" />
                   </FormControl>
@@ -208,27 +216,28 @@ function SupplierDetail() {
                     </FormLabel>
                     <Input size="sm" bgColor="gray.200" />
                   </FormControl>
-                  <FormControl>
-                    <FormLabel>
-                      <Text fontSize="sm">National Identity Number (NIK)</Text>
-                    </FormLabel>
-                    <Input size="sm" bgColor="gray.200" />
-                  </FormControl>
                 </Stack>
               </Box>
               <Box w="40%">
                 <Stack p={2}>
                   <FormControl>
                     <FormLabel>
-                      <Text fontSize="sm">Bank</Text>
+                      <Text fontSize="sm">Date of Birth</Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" isRequired />
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      type="date"
+                      isRequired
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel>
-                      <Text fontSize="sm">Supplier Details</Text>
+                      <Text fontSize="sm">
+                        Name Of Taxpayer Identification Number
+                      </Text>
                     </FormLabel>
-                    <Textarea bgColor="gray.200" />
+                    <Input size="sm" bgColor="gray.200" />
                   </FormControl>
                 </Stack>
               </Box>
@@ -240,4 +249,4 @@ function SupplierDetail() {
   );
 }
 
-export default SupplierDetail;
+export default CustomerDetail;

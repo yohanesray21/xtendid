@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Container, Flex } from "@chakra-ui/react";
 import TopBar from "../Navigation/TopBar";
 import Navbar from "../Navigation/Navbar";
-import Shorcut from "../Shorcut";
+import ShortcutSetting from "../Shortcut/ShortcutSetting";
 import Chart from "../Chart";
 import Reports from "../Reports";
 
@@ -18,7 +18,7 @@ function MasterData() {
 
             <Box pl={2} w="full">
               {/* Shortcut */}
-              <Shorcut />
+              <ShortcutSetting />
               {/* Chart */}
               <Chart />
 

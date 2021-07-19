@@ -10,9 +10,11 @@ import StockNewItem from "./Components/Main Menu/StockNewItem";
 import Accounting from "./Components/Main Menu/Accounting";
 import Setting from "./Components/Main Menu/Setting";
 import Supplier from "./Components/Main Menu/Supplier";
+import SupplierDetail from "./Components/Main Menu/SupplierDetail";
+import Customer from "./Components/Main Menu/Customer";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
-import SupplierDetail from "./Components/Main Menu/SupplierDetail";
+import CustomerDetail from "./Components/Main Menu/CustomerDetail";
 
 function App() {
   return (
@@ -54,6 +56,12 @@ function App() {
           </Route>
           <Route exact path="/supplier/detail">
             <SupplierDetail />
+          </Route>
+          <Route exact path="/customer">
+            <Customer />
+          </Route>
+          <Route exact path="/customer/detail">
+            <CustomerDetail />
           </Route>
         </Switch>
       </Router>

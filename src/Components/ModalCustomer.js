@@ -14,13 +14,15 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  Radio,
+  RadioGroup,
   Stack,
   Text,
   useDisclosure,
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
 
-function ModalButton() {
+function ModalCustomer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const initialRef = React.useRef();
@@ -28,7 +30,7 @@ function ModalButton() {
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
-        Create A New Supplier
+        Create A New Customer
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -40,7 +42,7 @@ function ModalButton() {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Center>Add New Supplier</Center>
+            <Center>Add New Customer</Center>
           </ModalHeader>
           <ModalCloseButton />
           <Box px={5}>
@@ -48,10 +50,20 @@ function ModalButton() {
           </Box>
           <ModalBody pb={4}>
             <Stack p={2}>
+              <RadioGroup defaultValue="company">
+                <Stack spacing={5} direction="row">
+                  <Radio colorScheme="green" value="company">
+                    Company
+                  </Radio>
+                  <Radio colorScheme="green" value="individual">
+                    Individual
+                  </Radio>
+                </Stack>
+              </RadioGroup>
               <FormControl>
                 <FormLabel>
                   <Text fontSize="sm" pt={2}>
-                    Supplier Name
+                    Customer Name
                   </Text>
                 </FormLabel>
                 <Input size="sm" bgColor="gray.200" isRequired />
@@ -126,4 +138,4 @@ function ModalButton() {
   );
 }
 
-export default ModalButton;
+export default ModalCustomer;

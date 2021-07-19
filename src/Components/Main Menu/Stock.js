@@ -2,7 +2,7 @@ import React from "react";
 import { Box, Container, Flex } from "@chakra-ui/react";
 import TopBar from "../Navigation/TopBar";
 import Navbar from "../Navigation/Navbar";
-import Shorcut from "../Shorcut";
+import ShortcutStock from "../Shortcut/ShortcutStock";
 import Chart from "../Chart";
 import Reports from "../Reports";
 
@@ -18,7 +18,7 @@ function Stock() {
 
             <Box pl={2} w="full">
               {/* Shortcut */}
-              <Shorcut />
+              <ShortcutStock />
               {/* Chart */}
               Hello
               <Chart />

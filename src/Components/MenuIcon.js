@@ -1,11 +1,4 @@
-import {
-  AddIcon,
-  DeleteIcon,
-  EditIcon,
-  ExternalLinkIcon,
-  HamburgerIcon,
-  RepeatIcon,
-} from "@chakra-ui/icons";
+import { AddIcon, DeleteIcon, EditIcon, HamburgerIcon } from "@chakra-ui/icons";
 import {
   IconButton,
   Menu,

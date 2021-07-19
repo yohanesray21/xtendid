@@ -10,15 +10,12 @@ import {
   FormLabel,
   Stack,
   Input,
-  InputGroup,
-  InputLeftElement,
-  Icon,
   Button,
   Heading,
   HStack,
   Select,
 } from "@chakra-ui/react";
-import { IoPerson, IoLogInOutline } from "react-icons/io5";
+import { IoLogInOutline } from "react-icons/io5";
 
 import Logo from "../assets/images/logo.png";
 import InputPassword from "./InputPassword";
@@ -42,7 +39,7 @@ function Login() {
               borderRadius="xl"
             >
               <Center>
-                <Image src={Logo} w="xs" />
+                <Image src={Logo} w="2xs" />
               </Center>
               <Box pt={4}>
                 <hr />
