@@ -119,7 +119,9 @@ function ModalButton() {
                     }
                   }}
                 >
-                  <option value="option">Select Status</option>
+                  <option value="option" style={{ color: "black" }}>
+                    Select Status
+                  </option>
                   <option value="available" style={{ color: "green" }}>
                     Available
                   </option>
