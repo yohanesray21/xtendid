@@ -3,6 +3,8 @@ import {
   Avatar,
   AvatarBadge,
   Box,
+  Button,
+  Center,
   Container,
   Flex,
   FormControl,
@@ -12,6 +14,10 @@ import {
   Input,
   InputGroup,
   InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuList,
   Wrap,
   WrapItem,
 } from "@chakra-ui/react";
@@ -19,8 +25,11 @@ import { IoNotifications, IoSearchOutline } from "react-icons/io5";
 
 import Logo from "../../assets/images/logo.png";
 import User from "../../assets/images/user.jpeg";
+import { useHistory } from "react-router-dom";
 
 function TopBar() {
+  const history = useHistory();
+
   return (
     <div>
       <Box w="full" borderColor="white.100" boxShadow="lg">
@@ -49,13 +58,44 @@ function TopBar() {
                     icon={<IoNotifications />}
                     mr={2}
                   />
-                  <Wrap>
+                  <Menu>
+                    <MenuButton bgColor="white" as={Button}>
+                      <Center>
+                        <Wrap>
+                          <WrapItem>
+                            <Avatar src={User} size="sm" name="user">
+                              <AvatarBadge boxSize="1.25em" bg="green.500" />
+                            </Avatar>
+                          </WrapItem>
+                        </Wrap>
+                      </Center>
+                    </MenuButton>
+                    <MenuList>
+                      <MenuItem
+                        onClick={() => {
+                          localStorage.removeItem("authToken");
+                          history.push("/login");
+                        }}
+                      >
+                        My Account
+                      </MenuItem>
+                      <MenuItem
+                        onClick={() => {
+                          localStorage.removeItem("authToken");
+                          history.push("/login");
+                        }}
+                      >
+                        Logout
+                      </MenuItem>
+                    </MenuList>
+                  </Menu>
+                  {/* <Wrap>
                     <WrapItem>
                       <Avatar src={User} size="sm" name="user">
                         <AvatarBadge boxSize="1.25em" bg="green.500" />
                       </Avatar>
                     </WrapItem>
-                  </Wrap>
+                  </Wrap> */}
                 </Flex>
               </Box>
             )}

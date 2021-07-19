@@ -24,13 +24,13 @@ import {
 } from "@chakra-ui/react";
 import TopBar from "../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { VscNewFile } from "react-icons/vsc";
+import { ImUserPlus } from "react-icons/im";
 import { IoFilter, IoHome } from "react-icons/io5";
-import ModalButton from "../ModalButton";
+import ModalCustomer from "../ModalCustomer";
 
-function StockItem() {
+function Customer() {
   return (
-    <>
+    <div>
       <TopBar />
       <Box bg="white" w="full" mt={4}>
         <Container maxW="container.xl" pt={2}>
@@ -49,10 +49,7 @@ function StockItem() {
                 </BreadcrumbItem>
 
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">Stock</BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">Item</BreadcrumbLink>
+                  <BreadcrumbLink href="#">Customer</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
@@ -76,7 +73,7 @@ function StockItem() {
                     icon={<AddIcon />}
                   />
                   <Button boxShadow="md" mr="px">
-                    Add Item
+                    Add Customer
                   </Button>
                 </ButtonGroup>
               </Stack>
@@ -93,17 +90,13 @@ function StockItem() {
           >
             <Flex justifyContent="space-between" justifyItems="center">
               <HStack spacing="10px" px={8}>
-                <Input size="sm" bgColor="gray.200" placeholder="Item Name" />
-                <Input size="sm" bgColor="gray.200" placeholder="Item Code" />
-                <Select
-                  bgColor="gray.200"
-                  color="gray.500"
-                  placeholder="Select Category"
+                <Input
                   size="sm"
-                >
-                  <option value="option2">Service</option>
-                  <option value="option3">Product</option>
-                </Select>
+                  bgColor="gray.200"
+                  placeholder="Customer Name"
+                />
+                <Input size="sm" bgColor="gray.200" placeholder="Company" />
+                <Input size="sm" bgColor="gray.200" placeholder="City" />
               </HStack>
               <Box px={8} py={6}>
                 <HStack spacing="5px" alignItems="center">
@@ -123,30 +116,30 @@ function StockItem() {
               <Table size="md">
                 <Thead>
                   <Tr>
-                    <Th>Item Code</Th>
-                    <Th>Item Name</Th>
-                    <Th>Status</Th>
-                    <Th>Product Category</Th>
-                    <Th>Cost</Th>
-                    <Th>Sales Price</Th>
-                    <Th isNumeric>Qty</Th>
+                    <Th>Name</Th>
+                    <Th>Phone</Th>
+                    <Th>Email</Th>
+                    <Th>Contact</Th>
+                    <Th>City</Th>
+                    <Th>Country</Th>
+                    <Th>Company</Th>
                   </Tr>
                 </Thead>
               </Table>
               <Center my={150}>
                 <VStack p={2}>
-                  <Icon fontSize="80" as={VscNewFile} />
-                  <Text>No Item Found</Text>
+                  <Icon fontSize="80" as={ImUserPlus} />
+                  <Text>No CustomerFound</Text>
                   {/* Button */}
-                  <ModalButton />
+                  <ModalCustomer />
                 </VStack>
               </Center>
             </Box>
           </Box>
         </Container>
       </Box>
-    </>
+    </div>
   );
 }
 
-export default StockItem;
+export default Customer;

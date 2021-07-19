@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -23,6 +23,8 @@ import { BiEdit } from "react-icons/bi";
 
 function ModalButton() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [colorSelect, setColorSelect] = useState("black");
 
   const initialRef = React.useRef();
   const finalRef = React.useRef();
@@ -100,7 +102,23 @@ function ModalButton() {
                 <FormLabel>
                   <Text fontSize="sm">Status</Text>
                 </FormLabel>
-                <Select size="sm" bgColor="gray.200">
+                <Select
+                  size="sm"
+                  bgColor="gray.200"
+                  color={colorSelect}
+                  onChange={(evt) => {
+                    if (evt.target.value === "available") {
+                      setColorSelect("green");
+                    }
+                    if (evt.target.value === "notAvailable") {
+                      setColorSelect("red");
+                    }
+
+                    if (evt.target.value === "option") {
+                      setColorSelect("black");
+                    }
+                  }}
+                >
                   <option value="option">Select Status</option>
                   <option value="available" style={{ color: "green" }}>
                     Available

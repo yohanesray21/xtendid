@@ -1,12 +1,16 @@
 import React from "react";
 import { Box, Container, Flex } from "@chakra-ui/react";
+import { Redirect } from "react-router";
 import TopBar from "../Navigation/TopBar";
 import Navbar from "../Navigation/Navbar";
-import Shorcut from "../Shorcut";
+import ShortcutMaster from "../Shortcut/ShortcutMaster";
 import Chart from "../Chart";
 import Reports from "../Reports";
 
 function MasterData() {
+  if (!localStorage.getItem("authToken")) {
+    return <Redirect to="/login" />;
+  }
   return (
     <>
       <TopBar />
@@ -16,9 +20,18 @@ function MasterData() {
           <Flex>
             <Navbar />
 
+            {/* <Button
+              onClick={() => {
+                localStorage.removeItem("authToken");
+                history.push("/login");
+              }}
+            >
+              Logout
+            </Button> */}
+
             <Box pl={2} w="full">
               {/* Shortcut */}
-              <Shorcut />
+              <ShortcutMaster />
               {/* Chart */}
               <Chart />
 

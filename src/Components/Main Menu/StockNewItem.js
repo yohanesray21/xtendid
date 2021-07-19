@@ -5,7 +5,6 @@ import {
   BreadcrumbItem,
   BreadcrumbLink,
   Button,
-  ButtonGroup,
   Container,
   Flex,
   FormControl,
@@ -15,16 +14,8 @@ import {
   Input,
   Select,
   Stack,
-  Table,
   Text,
-  Thead,
-  Tr,
-  Td,
-  Th,
-  Tbody,
-  Tfoot,
   Center,
-  VStack,
   Heading,
   Checkbox,
   FormLabel,
@@ -32,15 +23,8 @@ import {
   Image,
 } from "@chakra-ui/react";
 import TopBar from "../Navigation/TopBar";
-import {
-  AddIcon,
-  ArrowForwardIcon,
-  ChevronRightIcon,
-  EmailIcon,
-} from "@chakra-ui/icons";
-import { VscNewFile } from "react-icons/vsc";
-import { IoFilter, IoHome, IoPrintSharp } from "react-icons/io5";
-import ModalButton from "../ModalButton";
+import { ChevronRightIcon } from "@chakra-ui/icons";
+import { IoHome, IoPrintSharp } from "react-icons/io5";
 import MenuIcon from "../MenuIcon";
 
 function StockNewItem() {
