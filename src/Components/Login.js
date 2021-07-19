@@ -35,6 +35,7 @@ function Login(props) {
 
     // Real API
     // const url = "api.xtend.com/login";
+
     // axios
     //   .post(url, {
     //     username: username,
@@ -58,6 +59,7 @@ function Login(props) {
   if (localStorage.getItem("authToken")) {
     return <Redirect to="/" />;
   }
+
   return (
     <>
       <TopBar />
@@ -103,9 +105,7 @@ function Login(props) {
                     <FormLabel>Password</FormLabel>
                     <InputPassword
                       value={password}
-                      onChange={(evt) => {
-                        setPassword(evt.target.value);
-                      }}
+                      onChange={(evt) => setPassword(evt.target.value)}
                     />
                   </FormControl>
 
@@ -117,6 +117,7 @@ function Login(props) {
                     <Link to="/register">
                       <Button type="submit">Register</Button>
                     </Link>
+
                     <Button
                       type="submit"
                       rightIcon={<IoLogInOutline />}
