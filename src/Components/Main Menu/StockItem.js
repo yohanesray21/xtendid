@@ -22,6 +22,8 @@ import {
   Center,
   VStack,
 } from "@chakra-ui/react";
+import { Link } from "react-router-dom";
+
 import TopBar from "../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { VscNewFile } from "react-icons/vsc";
@@ -43,13 +45,17 @@ function StockItem() {
                 alignItems="center"
               >
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="#">
-                    <Icon fontSize="2xl" as={IoHome} />
-                  </BreadcrumbLink>
+                  <Link to="/">
+                    <BreadcrumbLink href="#">
+                      <Icon fontSize="2xl" as={IoHome} />
+                    </BreadcrumbLink>
+                  </Link>
                 </BreadcrumbItem>
 
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">Stock</BreadcrumbLink>
+                  <Link to="/stock">
+                    <BreadcrumbLink href="/stock">Stock</BreadcrumbLink>
+                  </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
                   <BreadcrumbLink href="#">Item</BreadcrumbLink>

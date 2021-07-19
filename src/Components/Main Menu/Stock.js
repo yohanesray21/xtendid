@@ -20,7 +20,6 @@ function Stock() {
               {/* Shortcut */}
               <ShortcutStock />
               {/* Chart */}
-              Hello
               <Chart />
               {/* Reports & Masters */}
               <Reports />

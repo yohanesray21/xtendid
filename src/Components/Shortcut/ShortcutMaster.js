@@ -7,6 +7,8 @@ import {
   Text,
   VStack,
 } from "@chakra-ui/react";
+
+import { Link } from "react-router-dom";
 import React from "react";
 import { FaBox, FaUserTie } from "react-icons/fa";
 
@@ -18,24 +20,27 @@ function Shorcut() {
           Shortcut
         </Heading>
         <HStack spacing={8} w="full">
-          <VStack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            px={14}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Icon fontSize="3xl" as={FaBox} />
-            <Box>
-              <Text fontSize="xl">128</Text>
-              <Text>Items</Text>
-            </Box>
-          </VStack>
+          <Link to="/stock/item">
+            <VStack
+              w="full"
+              border="1px"
+              borderColor="gray.200"
+              py={6}
+              px={14}
+              bgColor="white.100"
+              boxShadow="xs"
+              spacing={4}
+              _hover={{ bgColor: "teal", color: "white" }}
+              borderRadius="md"
+            >
+              <Icon fontSize="3xl" as={FaBox} />
+              <Box>
+                <Text fontSize="xl">128</Text>
+                <Text>Items</Text>
+              </Box>
+            </VStack>
+          </Link>
+
           <Stack
             w="full"
             border="1px"
