@@ -46,7 +46,7 @@ function StockItem() {
               >
                 <BreadcrumbItem>
                   <Link to="/">
-                    <BreadcrumbLink href="#">
+                    <BreadcrumbLink as="span">
                       <Icon fontSize="2xl" as={IoHome} />
                     </BreadcrumbLink>
                   </Link>
@@ -54,11 +54,11 @@ function StockItem() {
 
                 <BreadcrumbItem isCurrentPage>
                   <Link to="/stock">
-                    <BreadcrumbLink href="/stock">Stock</BreadcrumbLink>
+                    <BreadcrumbLink as="span">Stock</BreadcrumbLink>
                   </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">Item</BreadcrumbLink>
+                  <BreadcrumbLink as="span">Item</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
