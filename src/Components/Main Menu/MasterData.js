@@ -1,6 +1,7 @@
 import React from "react";
 import { Box, Container, Flex } from "@chakra-ui/react";
 import { Redirect } from "react-router";
+import Cookies from "js-cookie";
 
 import TopBar from "../Navigation/TopBar";
 import Navbar from "../Navigation/Navbar";
@@ -9,11 +10,7 @@ import Chart from "../Chart";
 import Reports from "../Reports";
 
 function MasterData() {
-  if (!localStorage.getItem("authToken")) {
-    return <Redirect to="/login" />;
-  }
-
-  if (!localStorage.getItem("authToken")) {
+  if (!Cookies.get("authToken")) {
     return <Redirect to="/login" />;
   }
 
