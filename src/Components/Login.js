@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Image,
@@ -34,7 +34,6 @@ function Login(props) {
     evt.preventDefault();
 
     // Real API
-    // const url = "api.xtend.com/login";
 
     // axios
     //   .post(url, {
@@ -47,15 +46,39 @@ function Login(props) {
     //     localStorage.getItem("authToken");
     //   });
 
-    axios.get("/auth.json").then((response) => {
-      const token = response.data.token;
+    // axios.post(url).then((response) => {
+    //   const token = response.data.token;
+    //   localStorage.setItem("authToken", token);
+
+    //   if (Boolean(token)) {
+    //     history.push("/");
+    //   }
+    // }
+    // );
+  };
+  useEffect(() => {
+    const login = async () => {
+      const { data } = await axios.post(
+        "http://xtendid.herokuapp.com/api/login",
+        {},
+        {
+          params: {
+            username: username,
+            password: password,
+          },
+        }
+      );
+
+      const token = data.data.token;
       localStorage.setItem("authToken", token);
 
       if (Boolean(token)) {
         history.push("/");
       }
-    });
-  };
+    };
+    login();
+  }, [username, password]);
+
   if (localStorage.getItem("authToken")) {
     return <Redirect to="/" />;
   }

@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Container, Flex } from "@chakra-ui/react";
-import TopBar from "../Navigation/TopBar";
-import Navbar from "../Navigation/Navbar";
-import ShortcutPurchase from "../Shortcut/ShortcutPurchase";
-import Chart from "../Chart";
-import Reports from "../Reports";
+import TopBar from "../../Navigation/TopBar";
+import Navbar from "../../Navigation/Navbar";
+import ShortcutPurchase from "../../Shortcut/ShortcutPurchase";
+import Chart from "../../Chart";
+import Reports from "../../Reports";
 
-function MasterData() {
+function Purchase() {
   return (
     <>
       <TopBar />
@@ -32,4 +32,4 @@ function MasterData() {
   );
 }
 
-export default MasterData;
+export default Purchase;
