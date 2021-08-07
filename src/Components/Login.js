@@ -17,6 +17,7 @@ import {
 } from "@chakra-ui/react";
 import { Link, useHistory, Redirect } from "react-router-dom";
 import axios from "axios";
+import Cookies from "js-cookie";
 
 import { IoPerson, IoLogInOutline } from "react-icons/io5";
 
@@ -27,11 +28,15 @@ import TopBar from "./Navigation/TopBar";
 function Login(props) {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const history = useHistory();
 
-  const handleSubmitLogin = (evt) => {
+  const handleSubmitLogin = async (evt) => {
     evt.preventDefault();
+    setIsLoading(true);
+    await login();
+    setIsLoading(false);
 
     // Real API
 
@@ -56,30 +61,33 @@ function Login(props) {
     // }
     // );
   };
-  useEffect(() => {
-    const login = async () => {
-      const { data } = await axios.post(
-        "http://xtendid.herokuapp.com/api/login",
-        {},
-        {
-          params: {
-            username: username,
-            password: password,
-          },
-        }
-      );
 
-      const token = data.data.token;
-      localStorage.setItem("authToken", token);
-
-      if (Boolean(token)) {
-        history.push("/");
+  const login = async () => {
+    const { data } = await axios.post(
+      "http://xtendid.herokuapp.com/api/login",
+      {},
+      {
+        params: {
+          username: username,
+          password: password,
+        },
       }
-    };
-    login();
-  }, [username, password]);
+    );
 
-  if (localStorage.getItem("authToken")) {
+    const expiredToken = data.data.token_expired_at;
+    const parsedDate = new Date(expiredToken);
+
+    const token = data.data.token;
+
+    Cookies.set("authToken", token, { expires: parsedDate });
+    // localStorage.setItem("authToken", token);
+
+    if (Boolean(token)) {
+      history.push("/");
+    }
+  };
+
+  if (Cookies.get("authToken")) {
     return <Redirect to="/" />;
   }
 
@@ -138,13 +146,14 @@ function Login(props) {
 
                   <Flex justifyContent="space-between" alignItems="center">
                     <Link to="/register">
-                      <Button type="submit">Register</Button>
+                      <Button type="button">Register</Button>
                     </Link>
 
                     <Button
                       type="submit"
                       rightIcon={<IoLogInOutline />}
                       colorScheme="teal"
+                      isLoading={isLoading}
                     >
                       Login
                     </Button>
