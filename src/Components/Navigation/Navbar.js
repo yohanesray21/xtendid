@@ -6,44 +6,7 @@ import { FaBox } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Navbar() {
-  // const navigation = [
-  //   { nav: "Master Data" },
-  //   { nav: "Master Data2" },
-  //   { nav: "Master Data3" },
-  //   { nav: "Master Data4" },
-  // ];
   const [nav, setNav] = useState("Master Data");
-  // const routes = [
-  //   {
-  //     path: "/",
-  //     exact: true,
-  //     main: () => <h2>Master Data</h2>,
-  //   },
-  //   {
-  //     path: "/purchase",
-  //     main: () => <h2>Purchase</h2>,
-  //   },
-  //   {
-  //     path: "/sales",
-  //     main: () => <h2>Sales</h2>,
-  //   },
-  //   {
-  //     path: "/stock",
-  //     main: () => <h2>Stock</h2>,
-  //   },
-  //   {
-  //     path: "/accounting",
-  //     main: () => <h2>Accounting</h2>,
-  //   },
-  //   {
-  //     path: "/Setting",
-  //     main: () => <h2>Main Setting</h2>,
-  //   },
-  // ];
-
-  // const [navigation, setNavigation] = useState(routes[0]);
-  // console.log(navigation);
-  // const onClick = ()
 
   return (
     <>
@@ -68,19 +31,16 @@ function Navbar() {
           </Box>
 
           <Stack p={3}>
-            <Link
-              to="/"
-              onClick={() => {
-                setNav(nav);
-                console.log(nav);
-              }}
-            >
+            <Link to="/">
               <HStack
                 p={2}
                 borderRadius="md"
                 _hover={{ bgColor: "teal", color: "white" }}
                 bgColor="white"
                 cursor="pointer"
+                onClick={() => {
+                  setNav("Master Data");
+                }}
               >
                 <Icon fontSize="xl" as={MdDashboard} />
                 <Text fontSize="md" pl={2}>
@@ -88,18 +48,16 @@ function Navbar() {
                 </Text>
               </HStack>
             </Link>
-            <Link
-              to="/purchase"
-              onClick={() => {
-                setNav("Purchase");
-              }}
-            >
+            <Link to="/purchase">
               <HStack
                 p={2}
                 borderRadius="md"
                 _hover={{ bgColor: "teal", color: "white" }}
                 bgColor="white"
                 cursor="pointer"
+                onClick={() => {
+                  setNav("Purchase");
+                }}
               >
                 <Icon fontSize="xl" as={IoCart} />
                 <Text fontSize="md" pl={2}>
