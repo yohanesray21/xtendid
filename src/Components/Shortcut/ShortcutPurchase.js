@@ -1,8 +1,21 @@
-import { Box, Heading, HStack, Icon, Text, VStack } from "@chakra-ui/react";
 import React from "react";
-import { FaBox } from "react-icons/fa";
+import {
+  Box,
+  Center,
+  Heading,
+  HStack,
+  Icon,
+  Stack,
+  Text,
+} from "@chakra-ui/react";
 
-function Shorcut() {
+import { Link } from "react-router-dom";
+import { FaFileInvoiceDollar, FaHistory, FaShoppingBag } from "react-icons/fa";
+import { IoBagCheckSharp } from "react-icons/io5";
+
+import ShortcutItems from "./ShortcutItems";
+
+function ShorcutPurchase() {
   return (
     <div>
       <Box w="full" bg="white">
@@ -10,100 +23,105 @@ function Shorcut() {
           Shortcut
         </Heading>
         <HStack spacing={8} w="full">
-          <VStack
+          <ShortcutItems />
+
+          <Stack
             w="full"
             border="1px"
             borderColor="gray.200"
             py={6}
-            px={14}
             bgColor="white.100"
             boxShadow="xs"
             spacing={4}
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
           >
-            <Icon fontSize="3xl" as={FaBox} />
+            <Center>
+              <Icon fontSize="3xl" as={FaShoppingBag} />
+            </Center>
             <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
+              <Text fontSize="xl">
+                <Center>32</Center>
+              </Text>
+              <Text>
+                <Center w={160}>Supplier Order</Center>
+              </Text>
             </Box>
-          </VStack>
-          <VStack
+          </Stack>
+          <Stack
             w="full"
             border="1px"
             borderColor="gray.200"
             py={6}
-            px={14}
             bgColor="white.100"
             boxShadow="xs"
             spacing={4}
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
           >
-            <Icon fontSize="3xl" as={FaBox} />
+            <Center>
+              <Icon fontSize="3xl" as={FaHistory} />
+            </Center>
             <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
+              <Text fontSize="xl">
+                <Center>2</Center>
+              </Text>
+              <Text>
+                <Center w={160}>Purchase History</Center>
+              </Text>
             </Box>
-          </VStack>
-          <VStack
+          </Stack>
+          <Stack
             w="full"
             border="1px"
             borderColor="gray.200"
             py={6}
-            px={14}
             bgColor="white.100"
             boxShadow="xs"
             spacing={4}
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
           >
-            <Icon fontSize="3xl" as={FaBox} />
+            <Center>
+              <Icon fontSize="3xl" as={FaFileInvoiceDollar} />
+            </Center>
             <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
+              <Text fontSize="xl">
+                <Center>4</Center>
+              </Text>
+              <Text>
+                <Center w={160}>Payment List</Center>
+              </Text>
             </Box>
-          </VStack>
-          <VStack
+          </Stack>
+
+          <Stack
             w="full"
             border="1px"
             borderColor="gray.200"
             py={6}
-            px={14}
             bgColor="white.100"
             boxShadow="xs"
             spacing={4}
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
           >
-            <Icon fontSize="3xl" as={FaBox} />
+            <Center>
+              <Icon fontSize="3xl" as={IoBagCheckSharp} />
+            </Center>
             <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
+              <Text fontSize="xl">
+                <Center>4</Center>
+              </Text>
+              <Text>
+                <Center w={160}>Paid Status</Center>
+              </Text>
             </Box>
-          </VStack>
-          <VStack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            px={14}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Icon fontSize="3xl" as={FaBox} />
-            <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
-            </Box>
-          </VStack>
+          </Stack>
         </HStack>
       </Box>
     </div>
   );
 }
 
-export default Shorcut;
+export default ShorcutPurchase;

@@ -25,7 +25,8 @@ import { IoNotifications, IoSearchOutline } from "react-icons/io5";
 
 import Logo from "../../assets/images/logo.png";
 import User from "../../assets/images/user.jpeg";
-import { useHistory } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function TopBar() {
   const history = useHistory();
@@ -35,7 +36,9 @@ function TopBar() {
       <Box w="full" borderColor="white.100" boxShadow="lg">
         <Container maxW="container.xl">
           <Flex justifyContent="space-between" alignItems="center" py={2}>
-            <Image src={Logo} w="2xs" />
+            <Link to="/">
+              <Image src={Logo} w="2xs" />
+            </Link>
 
             {window.location.pathname === "/login" ||
             window.location.pathname === "/register" ? (
@@ -81,7 +84,7 @@ function TopBar() {
                       </MenuItem>
                       <MenuItem
                         onClick={() => {
-                          localStorage.removeItem("authToken");
+                          Cookies.remove("authToken");
                           history.push("/login");
                         }}
                       >

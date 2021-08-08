@@ -1,18 +1,23 @@
 import {
   Box,
+  Center,
   Heading,
   HStack,
   Icon,
   Stack,
   Text,
-  VStack,
 } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
 import React from "react";
-import { FaBox, FaUserTie } from "react-icons/fa";
+import { FaUserTie } from "react-icons/fa";
+import { RiBankFill } from "react-icons/ri";
+import { HiChartBar } from "react-icons/hi";
 
-function Shorcut() {
+import ShortcutCustomer from "./ShortcutCustomer";
+import ShortcutItems from "./ShortcutItems";
+
+function ShortcutMaster() {
   return (
     <div>
       <Box w="full" bg="white">
@@ -20,26 +25,7 @@ function Shorcut() {
           Shortcut
         </Heading>
         <HStack spacing={8} w="full">
-          <Link to="/stock/item">
-            <VStack
-              w="full"
-              border="1px"
-              borderColor="gray.200"
-              py={6}
-              px={14}
-              bgColor="white.100"
-              boxShadow="xs"
-              spacing={4}
-              _hover={{ bgColor: "teal", color: "white" }}
-              borderRadius="md"
-            >
-              <Icon fontSize="3xl" as={FaBox} />
-              <Box>
-                <Text fontSize="xl">128</Text>
-                <Text>Items</Text>
-              </Box>
-            </VStack>
-          </Link>
+          <ShortcutItems />
 
           <Stack
             w="full"
@@ -52,15 +38,23 @@ function Shorcut() {
             spacing={4}
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
-            justifyContent="center"
           >
-            <Icon fontSize="3xl" as={FaUserTie} />
+            <Center>
+              <Icon fontSize="3xl" as={FaUserTie} />
+            </Center>
             <Box>
-              <Text fontSize="xl">32</Text>
-              <Text>Supplier</Text>
+              <Text fontSize="xl">
+                <Center>32</Center>
+              </Text>
+              <Text>
+                <Center>Supplier</Center>
+              </Text>
             </Box>
           </Stack>
-          <VStack
+
+          <ShortcutCustomer />
+
+          <Stack
             w="full"
             border="1px"
             borderColor="gray.200"
@@ -72,13 +66,19 @@ function Shorcut() {
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
           >
-            <Icon fontSize="3xl" as={FaBox} />
+            <Center>
+              <Icon fontSize="3xl" as={RiBankFill} />
+            </Center>
             <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
+              <Text fontSize="xl">
+                <Center>3</Center>
+              </Text>
+              <Text>
+                <Center>Banks</Center>
+              </Text>
             </Box>
-          </VStack>
-          <VStack
+          </Stack>
+          <Stack
             w="full"
             border="1px"
             borderColor="gray.200"
@@ -90,34 +90,22 @@ function Shorcut() {
             _hover={{ bgColor: "teal", color: "white" }}
             borderRadius="md"
           >
-            <Icon fontSize="3xl" as={FaBox} />
+            <Center>
+              <Icon fontSize="3xl" as={HiChartBar} />
+            </Center>
             <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
+              <Text fontSize="xl">
+                <Center>32</Center>
+              </Text>
+              <Text>
+                <Center>Sales</Center>
+              </Text>
             </Box>
-          </VStack>
-          <VStack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            px={14}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Icon fontSize="3xl" as={FaBox} />
-            <Box>
-              <Text fontSize="xl">123</Text>
-              <Text>Item</Text>
-            </Box>
-          </VStack>
+          </Stack>
         </HStack>
       </Box>
     </div>
   );
 }
 
-export default Shorcut;
+export default ShortcutMaster;
