@@ -27,30 +27,32 @@ function ShortcutMaster() {
         <HStack spacing={8} w="full">
           <ShortcutItems />
 
-          <Stack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            px={14}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Center>
-              <Icon fontSize="3xl" as={FaUserTie} />
-            </Center>
-            <Box>
-              <Text fontSize="xl">
-                <Center>32</Center>
-              </Text>
-              <Text>
-                <Center>Supplier</Center>
-              </Text>
-            </Box>
-          </Stack>
+          <Link to="supplier">
+            <Stack
+              w="full"
+              border="1px"
+              borderColor="gray.200"
+              py={6}
+              px={14}
+              bgColor="white.100"
+              boxShadow="xs"
+              spacing={4}
+              _hover={{ bgColor: "teal", color: "white" }}
+              borderRadius="md"
+            >
+              <Center>
+                <Icon fontSize="3xl" as={FaUserTie} />
+              </Center>
+              <Box>
+                <Text fontSize="xl">
+                  <Center>32</Center>
+                </Text>
+                <Text>
+                  <Center>Supplier</Center>
+                </Text>
+              </Box>
+            </Stack>
+          </Link>
 
           <ShortcutCustomer />
 

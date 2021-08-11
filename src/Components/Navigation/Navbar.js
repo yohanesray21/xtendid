@@ -5,8 +5,10 @@ import { MdDashboard } from "react-icons/md";
 import { FaBox } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
+const Navigation = [{ title: "Master Data" }, { title: "Purchase" }];
+
 function Navbar() {
-  const [nav, setNav] = useState("Master Data");
+  const [nav, setNav] = useState([]);
 
   return (
     <>
@@ -39,7 +41,7 @@ function Navbar() {
                 bgColor="white"
                 cursor="pointer"
                 onClick={() => {
-                  setNav("Master Data");
+                  setNav(Navigation[0].title);
                 }}
               >
                 <Icon fontSize="xl" as={MdDashboard} />
@@ -56,7 +58,7 @@ function Navbar() {
                 bgColor="white"
                 cursor="pointer"
                 onClick={() => {
-                  setNav("Purchase");
+                  setNav(Navigation[1].title);
                 }}
               >
                 <Icon fontSize="xl" as={IoCart} />
