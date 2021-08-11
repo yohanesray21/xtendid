@@ -33,7 +33,7 @@ function Customer() {
   useEffect(() => {
     const list = async () => {
       const { data } = await axios.get(
-        "http://xtendid.herokuapp.com/api/customer-get",
+        "https://xtendid.herokuapp.com/api/customer-get",
         {}
       );
       setCustomers(data.data);
