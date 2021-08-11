@@ -64,7 +64,7 @@ function Login(props) {
 
   const login = async () => {
     const { data } = await axios.post(
-      "http://xtendid.herokuapp.com/api/login",
+      "https://xtendid.herokuapp.com/api/login",
       {},
       {
         params: {
