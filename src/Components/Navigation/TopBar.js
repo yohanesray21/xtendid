@@ -32,8 +32,14 @@ function TopBar() {
   const history = useHistory();
 
   return (
-    <div>
-      <Box w="full" borderColor="white.100" boxShadow="lg">
+    <>
+      <Box
+        w="full"
+        borderColor="white.100"
+        boxShadow="lg"
+        bgColor="white
+        "
+      >
         <Container maxW="container.xl">
           <Flex justifyContent="space-between" alignItems="center" py={2}>
             <Link to="/">
@@ -105,7 +111,7 @@ function TopBar() {
           </Flex>
         </Container>
       </Box>
-    </div>
+    </>
   );
 }
 

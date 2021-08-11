@@ -2,7 +2,7 @@ import { Box, Heading, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { MdDashboard } from "react-icons/md";
 
-function ReportsPurchase() {
+function ReportsSales() {
   return (
     <>
       <Box
@@ -17,7 +17,7 @@ function ReportsPurchase() {
         <Box>
           <Heading fontSize="xl" pl={3} pt={10}>
             <Icon mr={2} as={MdDashboard} />
-            Purchase
+            Sales
           </Heading>
         </Box>
         <Box p={2}>
@@ -34,7 +34,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Purchase Order
+              Quotation
             </Text>
           </HStack>
           <HStack
@@ -46,7 +46,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Purchase History
+              Sales Order
             </Text>
           </HStack>
           <HStack
@@ -58,7 +58,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Payment Status
+              Payment List
             </Text>
           </HStack>
           <HStack
@@ -70,7 +70,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Paid Status
+              Sales History
             </Text>
           </HStack>
           <HStack
@@ -82,7 +82,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Bill
+              Sales Invoice
             </Text>
           </HStack>
         </Stack>
@@ -91,4 +91,4 @@ function ReportsPurchase() {
   );
 }
 
-export default ReportsPurchase;
+export default ReportsSales;
