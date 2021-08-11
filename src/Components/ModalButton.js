@@ -44,7 +44,7 @@ function ModalButton() {
 
   useEffect(() => {
     axios
-      .get("http://xtendid.herokuapp.com/api/item-get-lastid")
+      .get("https://xtendid.herokuapp.com/api/item-get-lastid")
       .then((response) => {
         setGetId(response.data.data.last_id);
       });
@@ -52,7 +52,7 @@ function ModalButton() {
 
   const addItem = async () => {
     const { data } = await axios.post(
-      "http://xtendid.herokuapp.com/api/item-store",
+      "https://xtendid.herokuapp.com/api/item-store",
       {},
       {
         params: {
