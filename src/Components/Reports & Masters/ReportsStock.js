@@ -2,7 +2,7 @@ import { Box, Heading, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { MdDashboard } from "react-icons/md";
 
-function ReportsPurchase() {
+function ReportsStock() {
   return (
     <>
       <Box
@@ -17,7 +17,7 @@ function ReportsPurchase() {
         <Box>
           <Heading fontSize="xl" pl={3} pt={10}>
             <Icon mr={2} as={MdDashboard} />
-            Purchase
+            Stock
           </Heading>
         </Box>
         <Box p={2}>
@@ -25,6 +25,37 @@ function ReportsPurchase() {
         </Box>
 
         <Stack p={3}>
+          {window.location.pathname === "/" ||
+          window.location.pathname === "/stock" ? (
+            <>
+              <HStack
+                p={2}
+                borderRadius="md"
+                _hover={{ bgColor: "teal", color: "white" }}
+                bgColor="white"
+                cursor="pointer"
+              >
+                <Icon as={MdDashboard} />
+                <Text fontSize="md" pl={2}>
+                  Stock In
+                </Text>
+              </HStack>
+              <HStack
+                p={2}
+                borderRadius="md"
+                _hover={{ bgColor: "teal", color: "white" }}
+                bgColor="white"
+                cursor="pointer"
+              >
+                <Icon as={MdDashboard} />
+                <Text fontSize="md" pl={2}>
+                  Stock Out
+                </Text>
+              </HStack>
+            </>
+          ) : (
+            " "
+          )}
           <HStack
             p={2}
             borderRadius="md"
@@ -34,7 +65,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Purchase Order
+              Item
             </Text>
           </HStack>
           <HStack
@@ -46,43 +77,7 @@ function ReportsPurchase() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Purchase History
-            </Text>
-          </HStack>
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Payment Status
-            </Text>
-          </HStack>
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Paid Status
-            </Text>
-          </HStack>
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Bill
+              Item Price
             </Text>
           </HStack>
         </Stack>
@@ -91,4 +86,4 @@ function ReportsPurchase() {
   );
 }
 
-export default ReportsPurchase;
+export default ReportsStock;

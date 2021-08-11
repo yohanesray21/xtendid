@@ -16,7 +16,7 @@ function Navbar() {
         <Box
           border="1px"
           w="270px"
-          h="930px"
+          h="100%"
           mr={2}
           borderColor="gray.200"
           boxShadow="lg"

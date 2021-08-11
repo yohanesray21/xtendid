@@ -14,6 +14,11 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
+  NumberDecrementStepper,
+  NumberIncrementStepper,
+  NumberInput,
+  NumberInputField,
+  NumberInputStepper,
   Select,
   Stack,
   Text,
@@ -28,9 +33,10 @@ function ModalButton() {
   const [colorSelect, setColorSelect] = useState("black");
   const [id, setId] = useState("");
   const [code, setCode] = useState("");
+  const [cost, setCost] = useState("0");
   const [name, setName] = useState("");
   const [category, setCategory] = useState("");
-  const [openingStock, setOpeningStock] = useState(0);
+  const [openingStock, setOpeningStock] = useState(null);
   const [baseUnit, setBaseUnit] = useState("");
   const [status, setStatus] = useState("");
   const [items, setItems] = useState([]);
@@ -52,6 +58,7 @@ function ModalButton() {
         params: {
           id: id,
           code: code,
+          cost: cost,
           name: name,
           category: category,
           openingStock: openingStock,
@@ -67,6 +74,12 @@ function ModalButton() {
   const handleSubmitItem = () => {
     console.log("Hello");
   };
+
+  // Currency
+  // const value = (cost, prefix) => {
+  //   var valueString = cost.replace(/[^, \d]/g, " ").toString(),
+  //   split =
+  // }
 
   const initialRef = React.useRef();
   const finalRef = React.useRef();
@@ -102,7 +115,8 @@ function ModalButton() {
                   <Input
                     size="sm"
                     bgColor="gray.200"
-                    value={getId}
+                    value={`ITEM-${getId + 1}`}
+                    onChange={(evt) => setCode(evt.target.value)}
                     isRequired
                   />
                 </FormControl>
@@ -110,13 +124,23 @@ function ModalButton() {
                   <FormLabel>
                     <Text fontSize="sm">Item Name</Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    value={name}
+                    onChange={(evt) => setName(evt.target.value)}
+                  />
                 </FormControl>
                 <FormControl>
                   <FormLabel>
                     <Text fontSize="sm">Product category</Text>
                   </FormLabel>
-                  <Select size="sm" bgColor="gray.200">
+                  <Select
+                    size="sm"
+                    bgColor="gray.200"
+                    value={category}
+                    onChange={(evt) => setCategory(evt.target.value)}
+                  >
                     <option value="option1">Service</option>
                     <option value="option2">Product</option>
                   </Select>
@@ -125,14 +149,25 @@ function ModalButton() {
                   <FormLabel>
                     <Text fontSize="sm">Opening Stock</Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    type="number"
+                    value={openingStock}
+                    onChange={(evt) => setOpeningStock(evt.target.value)}
+                  />
                 </FormControl>
                 <Flex alignItems="center">
                   <FormControl pr={2} w="30%">
                     <FormLabel>
                       <Text fontSize="sm">Base Unit</Text>
                     </FormLabel>
-                    <Select size="sm" bgColor="gray.200">
+                    <Select
+                      size="sm"
+                      bgColor="gray.200"
+                      value={baseUnit}
+                      onChange={(evt) => setBaseUnit(evt.target.value)}
+                    >
                       <option value="option1">Pcs</option>
                       <option value="option1">Pack</option>
                       <option value="option1">Box</option>
@@ -142,7 +177,25 @@ function ModalButton() {
                     <FormLabel>
                       <Text fontSize="sm">Cost</Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                    {/* <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      type=""
+                      min="1"
+                      value={format(cost)}
+                      onChange={(valueString) => setCost(parse(valueString))}
+                    /> */}
+                    {/* <NumberInput
+                      onChange={(valueString) => setCost(parse(valueString))}
+                      value={format(cost)}
+                      max={50}
+                    >
+                      <NumberInputField />
+                      <NumberInputStepper>
+                        <NumberIncrementStepper />
+                        <NumberDecrementStepper />
+                      </NumberInputStepper>
+                    </NumberInput> */}
                   </FormControl>
                 </Flex>
                 <FormControl>
