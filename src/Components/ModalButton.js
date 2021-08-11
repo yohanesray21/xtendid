@@ -14,11 +14,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  NumberDecrementStepper,
-  NumberIncrementStepper,
-  NumberInput,
-  NumberInputField,
-  NumberInputStepper,
   Select,
   Stack,
   Text,
@@ -27,20 +22,28 @@ import {
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
 
-function ModalButton() {
+const formatNumber = (data) => {
+  const dotRemoved = data.split(".").join("");
+
+  return "Rp " + Intl.NumberFormat("id-Id").format(dotRemoved);
+};
+
+function ModalButton({ buttonText, setListItem }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [colorSelect, setColorSelect] = useState("black");
   const [id, setId] = useState("");
   const [code, setCode] = useState("");
-  const [cost, setCost] = useState("0");
+  const [cost, setCost] = useState("");
   const [name, setName] = useState("");
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState("Service");
   const [openingStock, setOpeningStock] = useState(null);
   const [baseUnit, setBaseUnit] = useState("");
   const [status, setStatus] = useState("");
   const [items, setItems] = useState([]);
   const [getId, setGetId] = useState(null);
+
+  const [isLoadingAddItem, setIsLoadingAddItem] = useState(false);
 
   useEffect(() => {
     axios
@@ -51,14 +54,18 @@ function ModalButton() {
   }, []);
 
   const addItem = async () => {
+    const formattedCostToNumber = Number(
+      cost.split("Rp ").join("").split(".").join("")
+    );
+
     const { data } = await axios.post(
       "https://xtendid.herokuapp.com/api/item-store",
       {},
       {
         params: {
           id: id,
-          code: code,
-          cost: cost,
+          code: `ITEM-${getId + 1}`,
+          cost: formattedCostToNumber,
           name: name,
           category: category,
           openingStock: openingStock,
@@ -67,12 +74,32 @@ function ModalButton() {
         },
       }
     );
-    setItems(data);
-    console.log(data);
+
+    const url = "https://xtendid.herokuapp.com/api/item-get";
+    const { data: listData } = await axios.get(url, {});
+    setListItem(listData.data);
+
+    axios
+      .get("https://xtendid.herokuapp.com/api/item-get-lastid")
+      .then((response) => {
+        setGetId(response.data.data.last_id);
+      });
+
+    onClose();
+    // setItems(data);
+    // console.log(data);
   };
 
-  const handleSubmitItem = () => {
-    console.log("Hello");
+  const handleSubmitItem = async (evt) => {
+    evt.preventDefault();
+    setIsLoadingAddItem(true);
+
+    try {
+      await addItem();
+    } catch (err) {
+    } finally {
+      setIsLoadingAddItem(false);
+    }
   };
 
   // Currency
@@ -87,7 +114,7 @@ function ModalButton() {
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
-        Create A New Item
+        {buttonText ? buttonText : "Create New Ttem"}
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -105,12 +132,14 @@ function ModalButton() {
           <Box px={5}>
             <hr />
           </Box>
-          <ModalBody pb={4}>
-            <forms onSubmit={handleSubmitItem}>
+          <form onSubmit={handleSubmitItem}>
+            <ModalBody pb={4}>
               <Stack p={2}>
                 <FormControl>
                   <FormLabel>
-                    <Text fontSize="sm" pt={2}></Text>
+                    <Text fontSize="sm" pt={2}>
+                      Item Code
+                    </Text>
                   </FormLabel>
                   <Input
                     size="sm"
@@ -129,6 +158,7 @@ function ModalButton() {
                     bgColor="gray.200"
                     value={name}
                     onChange={(evt) => setName(evt.target.value)}
+                    isRequired
                   />
                 </FormControl>
                 <FormControl>
@@ -140,9 +170,10 @@ function ModalButton() {
                     bgColor="gray.200"
                     value={category}
                     onChange={(evt) => setCategory(evt.target.value)}
+                    isRequired
                   >
-                    <option value="option1">Service</option>
-                    <option value="option2">Product</option>
+                    <option value="Service">Service</option>
+                    <option value="Product">Product</option>
                   </Select>
                 </FormControl>
                 <FormControl>
@@ -168,34 +199,32 @@ function ModalButton() {
                       value={baseUnit}
                       onChange={(evt) => setBaseUnit(evt.target.value)}
                     >
-                      <option value="option1">Pcs</option>
-                      <option value="option1">Pack</option>
-                      <option value="option1">Box</option>
+                      <option value="Pcs">Pcs</option>
+                      <option value="Pack">Pack</option>
+                      <option value="Box">Box</option>
                     </Select>
                   </FormControl>
                   <FormControl>
                     <FormLabel>
                       <Text fontSize="sm">Cost</Text>
                     </FormLabel>
-                    {/* <Input
+                    <Input
                       size="sm"
                       bgColor="gray.200"
-                      type=""
-                      min="1"
-                      value={format(cost)}
-                      onChange={(valueString) => setCost(parse(valueString))}
-                    /> */}
-                    {/* <NumberInput
-                      onChange={(valueString) => setCost(parse(valueString))}
-                      value={format(cost)}
-                      max={50}
-                    >
-                      <NumberInputField />
-                      <NumberInputStepper>
-                        <NumberIncrementStepper />
-                        <NumberDecrementStepper />
-                      </NumberInputStepper>
-                    </NumberInput> */}
+                      type="text"
+                      value={cost}
+                      onBlur={() => {
+                        const formatted = formatNumber(cost);
+                        setCost(formatted);
+                      }}
+                      onFocus={() => {
+                        const removedRp = cost.split("Rp ").join("");
+                        setCost(removedRp);
+                      }}
+                      onChange={(evt) => {
+                        setCost(evt.target.value);
+                      }}
+                    />
                   </FormControl>
                 </Flex>
                 <FormControl>
@@ -203,6 +232,7 @@ function ModalButton() {
                     <Text fontSize="sm">Status</Text>
                   </FormLabel>
                   <Select
+                    isRequired
                     size="sm"
                     bgColor="gray.200"
                     color={colorSelect}
@@ -214,12 +244,11 @@ function ModalButton() {
                         setColorSelect("red");
                       }
 
-                      if (evt.target.value === "option") {
-                        setColorSelect("black");
-                      }
+                      setStatus(evt.target.value);
                     }}
+                    value={status}
                   >
-                    <option value="option" style={{ color: "black" }}>
+                    <option value="" style={{ color: "black" }}>
                       Select Status
                     </option>
                     <option value="available" style={{ color: "green" }}>
@@ -231,24 +260,29 @@ function ModalButton() {
                   </Select>
                 </FormControl>
               </Stack>
-            </forms>
-          </ModalBody>
-
-          <ModalFooter>
-            <Flex
-              px={2}
-              w="full"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Button size="sm" mr={3} leftIcon={<BiEdit />}>
-                Edit in Full Page
-              </Button>
-              <Box>
-                <Button colorScheme="teal">Save</Button>
-              </Box>
-            </Flex>
-          </ModalFooter>
+            </ModalBody>
+            <ModalFooter>
+              <Flex
+                px={2}
+                w="full"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Button size="sm" mr={3} leftIcon={<BiEdit />}>
+                  Edit in Full Page
+                </Button>
+                <Box>
+                  <Button
+                    colorScheme="teal"
+                    type="submit"
+                    isLoading={isLoadingAddItem}
+                  >
+                    Save
+                  </Button>
+                </Box>
+              </Flex>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>

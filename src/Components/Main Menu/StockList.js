@@ -28,6 +28,7 @@ import TopBar from "../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
+import ModalButton from "../ModalButton";
 
 function StockList() {
   const url = "https://xtendid.herokuapp.com/api/item-get";
@@ -110,9 +111,7 @@ function StockList() {
                     aria-label="Add to friends"
                     icon={<AddIcon />}
                   />
-                  <Button boxShadow="md" mr="px">
-                    Add Item
-                  </Button>
+                  <ModalButton buttonText="Add Item" setListItem={setResults} />
                 </ButtonGroup>
               </Stack>
             </Box>
