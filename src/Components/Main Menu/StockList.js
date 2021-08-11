@@ -30,7 +30,7 @@ import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
 
 function StockList() {
-  const url = "http://xtendid.herokuapp.com/api/item-get";
+  const url = "https://xtendid.herokuapp.com/api/item-get";
 
   const [results, setResults] = useState([]);
 

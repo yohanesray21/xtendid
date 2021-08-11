@@ -54,7 +54,7 @@ function Register(props) {
 
   const register = async () => {
     const { data } = await axios.post(
-      "http://xtendid.herokuapp.com/api/register",
+      "https://xtendid.herokuapp.com/api/register",
       {},
       {
         params: {

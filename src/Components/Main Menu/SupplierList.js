@@ -27,7 +27,7 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
 function Supplier() {
-  const url = "http://xtendid.herokuapp.com/api/supplier-get";
+  const url = "https://xtendid.herokuapp.com/api/supplier-get";
 
   const [suppliers, setSuppliers] = useState([]);
 
