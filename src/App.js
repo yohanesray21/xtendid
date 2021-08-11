@@ -12,8 +12,10 @@ import StockNewItem from "./Components/Main Menu/StockNewItem";
 import Accounting from "./Components/Main Menu/Accounting";
 import Setting from "./Components/Main Menu/Setting";
 import Supplier from "./Components/Main Menu/Supplier";
+import SupplierList from "./Components/Main Menu/SupplierList";
 import SupplierDetail from "./Components/Main Menu/SupplierDetail";
 import Customer from "./Components/Main Menu/Customer";
+import CustomerList from "./Components/Main Menu/CustomerList";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CustomerDetail from "./Components/Main Menu/CustomerDetail";
@@ -62,11 +64,17 @@ function App() {
           <Route exact path="/supplier">
             <Supplier />
           </Route>
+          <Route exact path="/supplier/list">
+            <SupplierList />
+          </Route>
           <Route exact path="/supplier/detail">
             <SupplierDetail />
           </Route>
           <Route exact path="/customer">
             <Customer />
+          </Route>
+          <Route exact path="/customer/list">
+            <CustomerList />
           </Route>
           <Route exact path="/customer/detail">
             <CustomerDetail />
