@@ -21,6 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
+import { Link } from "react-router-dom";
 
 const formatNumber = (data) => {
   const dotRemoved = data.split(".").join("");
@@ -268,9 +269,11 @@ function ModalButton({ buttonText, setListItem }) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Button size="sm" mr={3} leftIcon={<BiEdit />}>
-                  Edit in Full Page
-                </Button>
+                <Link to="/stock/item/new">
+                  <Button size="sm" mr={3} leftIcon={<BiEdit />}>
+                    Edit in Full Page
+                  </Button>
+                </Link>
                 <Box>
                   <Button
                     colorScheme="teal"

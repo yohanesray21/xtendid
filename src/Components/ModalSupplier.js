@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Button,
@@ -19,16 +19,87 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
+import axios from "axios";
+import Supplier from "./Main Menu/Supplier";
+import { Link } from "react-router-dom";
 
-function ModalButton() {
+function ModalSupplier({ buttonText, setListSuppliers }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [companyName, setcompanyName] = useState("");
+  const [supplierName, setSupplierName] = useState("");
+  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
+  const [address, setAddress] = useState("");
+  const [country, setCountry] = useState("");
+  const [province, setProvince] = useState("");
+  const [city, setCity] = useState("");
+  const [zip, setZip] = useState("");
+  const [getSupplierId, setGetSupplierId] = useState(null);
+
+  const [isLoadingAddSuppplier, setIsLoadingAddSuppplier] = useState(false);
+
+  useEffect(() => {
+    axios
+      .get("https://xtendid.herokuapp.com/api/supplier-get-lastid")
+      .then((response) => {
+        setGetSupplierId(response.data.data.last_id);
+      });
+  }, []);
+
+  const addSupplier = async () => {
+    const { data } = await axios.post(
+      "https://xtendid.herokuapp.com/api/supplier-store",
+      {},
+      {
+        params: {
+          supplier_id: `SUP-${getSupplierId + 1}`,
+          company_name: companyName,
+          supplier_name: supplierName,
+          email: email,
+          phone: phone,
+          address: address,
+          country: country,
+          province: province,
+          city: city,
+          zip_code: zip,
+        },
+      }
+    );
+
+    const url = "https://xtendid.herokuapp.com/api/supplier-get";
+    const { data: listData } = await axios.get(url, {});
+    console.log(listData);
+    setListSuppliers(listData.data);
+
+    axios
+      .get("https://xtendid.herokuapp.com/api/supplier-get-lastid")
+      .then((response) => {
+        setGetSupplierId(response.data.data.last_id);
+      });
+
+    onClose();
+  };
+
+  const handleSubmitSupplier = async (evt) => {
+    evt.preventDefault();
+    console.log("berhasil");
+    setIsLoadingAddSuppplier(true);
+
+    try {
+      await addSupplier();
+    } catch (err) {
+    } finally {
+      setIsLoadingAddSuppplier(false);
+    }
+  };
 
   const initialRef = React.useRef();
   const finalRef = React.useRef();
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
-        Create A New Supplier
+        {buttonText ? buttonText : "Create New Item"}
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -46,84 +117,193 @@ function ModalButton() {
           <Box px={5}>
             <hr />
           </Box>
-          <ModalBody pb={4}>
-            <Stack p={2}>
-              <FormControl>
-                <FormLabel>
-                  <Text fontSize="sm" pt={2}>
-                    Supplier Name
-                  </Text>
-                </FormLabel>
-                <Input size="sm" bgColor="gray.200" isRequired />
-              </FormControl>
-              <FormControl>
-                <FormLabel>
-                  <Text fontSize="sm">Address</Text>
-                </FormLabel>
-                <Input size="sm" bgColor="gray.200" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>
-                  <Text fontSize="sm">Email</Text>
-                </FormLabel>
-                <Input size="sm" bgColor="gray.200" type="email" />
-              </FormControl>
-              <FormControl>
-                <FormLabel>
-                  <Text fontSize="sm">Contact</Text>
-                </FormLabel>
-                <Input size="sm" bgColor="gray.200" type="number" />
-              </FormControl>
-              <Flex alignItems="center">
-                <FormControl pr={3} w="50%">
+          <form onSubmit={handleSubmitSupplier}>
+            <ModalBody pb={4}>
+              <Stack p={2}>
+                <FormControl>
                   <FormLabel>
-                    <Text fontSize="sm">City</Text>
+                    <Text fontSize="sm" pt={2}>
+                      Supplier ID
+                    </Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" />
-                </FormControl>
-                <FormControl w="50%">
-                  <FormLabel>
-                    <Text fontSize="sm">State</Text>
-                  </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
-                </FormControl>
-              </Flex>
-              <Flex alignItems="center">
-                <FormControl pr={3} w="40%">
-                  <FormLabel>
-                    <Text fontSize="sm">Zip</Text>
-                  </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    value={`SUP-${getSupplierId + 1}`}
+                    type="text"
+                    onChange={(evt) => {
+                      setSupplierName(evt.target.value);
+                    }}
+                    isRequired
+                  />
                 </FormControl>
                 <FormControl>
                   <FormLabel>
-                    <Text fontSize="sm">Country</Text>
+                    <Text fontSize="sm" pt={2}>
+                      Supplier Name
+                    </Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    value={supplierName}
+                    type="text"
+                    onChange={(evt) => {
+                      setSupplierName(evt.target.value);
+                    }}
+                    isRequired
+                  />
                 </FormControl>
-              </Flex>
-            </Stack>
-          </ModalBody>
+                <FormControl>
+                  <FormLabel>
+                    <Text fontSize="sm" pt={2}>
+                      Company Name
+                    </Text>
+                  </FormLabel>
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    value={companyName}
+                    type="text"
+                    onChange={(evt) => {
+                      setcompanyName(evt.target.value);
+                    }}
+                    isRequired
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>
+                    <Text fontSize="sm">Address</Text>
+                  </FormLabel>
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    value={address}
+                    type="text"
+                    onChange={(evt) => {
+                      setAddress(evt.target.value);
+                    }}
+                    isRequired
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>
+                    <Text fontSize="sm">Email</Text>
+                  </FormLabel>
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    type="email"
+                    value={email}
+                    onChange={(evt) => {
+                      setEmail(evt.target.value);
+                    }}
+                    isRequired
+                  />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>
+                    <Text fontSize="sm">Contact</Text>
+                  </FormLabel>
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    type="number"
+                    value={phone}
+                    onChange={(evt) => {
+                      setPhone(evt.target.value);
+                    }}
+                    isRequired
+                  />
+                </FormControl>
+                <Flex alignItems="center">
+                  <FormControl pr={3} w="50%">
+                    <FormLabel>
+                      <Text fontSize="sm">City</Text>
+                    </FormLabel>
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      value={city}
+                      onChange={(evt) => {
+                        setCity(evt.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl w="50%">
+                    <FormLabel>
+                      <Text fontSize="sm">Province</Text>
+                    </FormLabel>
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      value={province}
+                      onChange={(evt) => {
+                        setProvince(evt.target.value);
+                      }}
+                    />
+                  </FormControl>
+                </Flex>
+                <Flex alignItems="center">
+                  <FormControl pr={3} w="40%">
+                    <FormLabel>
+                      <Text fontSize="sm">Zip</Text>
+                    </FormLabel>
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      type="number"
+                      value={zip}
+                      onChange={(evt) => {
+                        setZip(evt.target.value);
+                      }}
+                    />
+                  </FormControl>
+                  <FormControl>
+                    <FormLabel>
+                      <Text fontSize="sm">Country</Text>
+                    </FormLabel>
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      value={country}
+                      onChange={(evt) => {
+                        setCountry(evt.target.value);
+                      }}
+                    />
+                  </FormControl>
+                </Flex>
+              </Stack>
+            </ModalBody>
 
-          <ModalFooter>
-            <Flex
-              px={2}
-              w="full"
-              justifyContent="space-between"
-              alignItems="center"
-            >
-              <Button size="sm" mr={3} leftIcon={<BiEdit />}>
-                Edit in Full Page
-              </Button>
-              <Box>
-                <Button colorScheme="teal">Save</Button>
-              </Box>
-            </Flex>
-          </ModalFooter>
+            <ModalFooter>
+              <Flex
+                px={2}
+                w="full"
+                justifyContent="space-between"
+                alignItems="center"
+              >
+                <Link to="/supplier/detail">
+                  <Button size="sm" mr={3} leftIcon={<BiEdit />}>
+                    Edit in Full Page
+                  </Button>
+                </Link>
+                <Box>
+                  <Button
+                    colorScheme="teal"
+                    type="submit"
+                    isLoading={isLoadingAddSuppplier}
+                  >
+                    Save
+                  </Button>
+                </Box>
+              </Flex>
+            </ModalFooter>
+          </form>
         </ModalContent>
       </Modal>
     </>
   );
 }
 
-export default ModalButton;
+export default ModalSupplier;

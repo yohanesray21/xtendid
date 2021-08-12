@@ -26,6 +26,7 @@ import TopBar from "../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
+import ModalSupplier from "../ModalSupplier";
 function Supplier() {
   const url = "https://xtendid.herokuapp.com/api/supplier-get";
 
@@ -98,7 +99,10 @@ function Supplier() {
                     icon={<AddIcon />}
                   />
                   <Button boxShadow="md" mr="px">
-                    Add Supplier
+                    <ModalSupplier
+                      buttonText="Add Supplier"
+                      setListSuppliers={setSuppliers}
+                    />
                   </Button>
                 </ButtonGroup>
               </Stack>

@@ -1,9 +1,23 @@
 import { Box, Center, Icon, Text, VStack } from "@chakra-ui/react";
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
 import { FaBox } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function Items() {
+  const url = "https://xtendid.herokuapp.com/api/item-count";
+
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const list = async () => {
+      const { data } = await axios.get(url, {});
+      setResults(data.data);
+      console.log(results);
+    };
+
+    list();
+  }, []);
   return (
     <>
       <Link to="/stock/item">
@@ -24,7 +38,7 @@ function Items() {
           </Center>
           <Box>
             <Text fontSize="xl">
-              <Center>128</Center>
+              <Center>{results.total_item}</Center>
             </Text>
             <Text>
               <Center>Items</Center>

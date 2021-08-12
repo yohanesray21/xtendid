@@ -17,13 +17,6 @@ function PurchaseCharts() {
     { name: "Page D", uv: 200, pv: 2400, amt: 2400 },
     { name: "Page E", uv: 100, pv: 2400, amt: 2400 },
   ];
-  const data2 = [
-    { name: "Page A", uv: 600, pv: 2400, amt: 2400 },
-    { name: "Page B", uv: 900, pv: 2400, amt: 2400 },
-    { name: "Page C", uv: 900, pv: 2400, amt: 2400 },
-    { name: "Page D", uv: 200, pv: 2400, amt: 2400 },
-    { name: "Page E", uv: 100, pv: 2400, amt: 2400 },
-  ];
 
   return (
     <Box p={10}>

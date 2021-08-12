@@ -24,6 +24,7 @@ import InputPassword from "./InputPassword";
 import TopBar from "./Navigation/TopBar";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+import Cookies from "js-cookie";
 
 function Register(props) {
   const [username, setUsername] = useState("");
@@ -51,6 +52,10 @@ function Register(props) {
     //   isClosable: true,
     // });
   };
+
+  if (Cookies.get("authToken")) {
+    return <Redirect to="/" />;
+  }
 
   const register = async () => {
     const { data } = await axios.post(
