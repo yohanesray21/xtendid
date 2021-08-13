@@ -24,7 +24,10 @@ import InputPassword from "./InputPassword";
 import TopBar from "./Navigation/TopBar";
 import axios from "axios";
 import { Redirect } from "react-router-dom";
+<<<<<<< HEAD
 import Cookies from "js-cookie";
+=======
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
 
 function Register(props) {
   const [username, setUsername] = useState("");
@@ -53,10 +56,13 @@ function Register(props) {
     // });
   };
 
+<<<<<<< HEAD
   if (Cookies.get("authToken")) {
     return <Redirect to="/" />;
   }
 
+=======
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
   const register = async () => {
     const { data } = await axios.post(
       "https://xtendid.herokuapp.com/api/register",

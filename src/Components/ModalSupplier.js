@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 import React, { useEffect, useState } from "react";
+=======
+import React from "react";
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
 import {
   Box,
   Button,
@@ -19,6 +23,7 @@ import {
   useDisclosure,
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
+<<<<<<< HEAD
 import axios from "axios";
 import Supplier from "./Main Menu/Supplier";
 import { Link } from "react-router-dom";
@@ -94,12 +99,22 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
     }
   };
 
+=======
+
+function ModalButton() {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
   const initialRef = React.useRef();
   const finalRef = React.useRef();
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
+<<<<<<< HEAD
         {buttonText ? buttonText : "Create New Item"}
+=======
+        Create A New Supplier
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -117,6 +132,7 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
           <Box px={5}>
             <hr />
           </Box>
+<<<<<<< HEAD
           <form onSubmit={handleSubmitSupplier}>
             <ModalBody pb={4}>
               <Stack p={2}>
@@ -300,10 +316,90 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
               </Flex>
             </ModalFooter>
           </form>
+=======
+          <ModalBody pb={4}>
+            <Stack p={2}>
+              <FormControl>
+                <FormLabel>
+                  <Text fontSize="sm" pt={2}>
+                    Supplier Name
+                  </Text>
+                </FormLabel>
+                <Input size="sm" bgColor="gray.200" isRequired />
+              </FormControl>
+              <FormControl>
+                <FormLabel>
+                  <Text fontSize="sm">Address</Text>
+                </FormLabel>
+                <Input size="sm" bgColor="gray.200" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>
+                  <Text fontSize="sm">Email</Text>
+                </FormLabel>
+                <Input size="sm" bgColor="gray.200" type="email" />
+              </FormControl>
+              <FormControl>
+                <FormLabel>
+                  <Text fontSize="sm">Contact</Text>
+                </FormLabel>
+                <Input size="sm" bgColor="gray.200" type="number" />
+              </FormControl>
+              <Flex alignItems="center">
+                <FormControl pr={3} w="50%">
+                  <FormLabel>
+                    <Text fontSize="sm">City</Text>
+                  </FormLabel>
+                  <Input size="sm" bgColor="gray.200" type="number" />
+                </FormControl>
+                <FormControl w="50%">
+                  <FormLabel>
+                    <Text fontSize="sm">State</Text>
+                  </FormLabel>
+                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                </FormControl>
+              </Flex>
+              <Flex alignItems="center">
+                <FormControl pr={3} w="40%">
+                  <FormLabel>
+                    <Text fontSize="sm">Zip</Text>
+                  </FormLabel>
+                  <Input size="sm" bgColor="gray.200" type="number" />
+                </FormControl>
+                <FormControl>
+                  <FormLabel>
+                    <Text fontSize="sm">Country</Text>
+                  </FormLabel>
+                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                </FormControl>
+              </Flex>
+            </Stack>
+          </ModalBody>
+
+          <ModalFooter>
+            <Flex
+              px={2}
+              w="full"
+              justifyContent="space-between"
+              alignItems="center"
+            >
+              <Button size="sm" mr={3} leftIcon={<BiEdit />}>
+                Edit in Full Page
+              </Button>
+              <Box>
+                <Button colorScheme="teal">Save</Button>
+              </Box>
+            </Flex>
+          </ModalFooter>
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
         </ModalContent>
       </Modal>
     </>
   );
 }
 
+<<<<<<< HEAD
 export default ModalSupplier;
+=======
+export default ModalButton;
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807

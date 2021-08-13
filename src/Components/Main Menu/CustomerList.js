@@ -26,7 +26,10 @@ import TopBar from "../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
+<<<<<<< HEAD
 import ModalCustomer from "../ModalCustomer";
+=======
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
 
 function Customer() {
   const [customers, setCustomers] = useState([]);
@@ -102,10 +105,14 @@ function Customer() {
                     icon={<AddIcon />}
                   />
                   <Button boxShadow="md" mr="px">
+<<<<<<< HEAD
                     <ModalCustomer
                       buttonText="Add Customer"
                       setListCustomers={setCustomers}
                     />
+=======
+                    Add Customer
+>>>>>>> b822c2930093ee1100292c2e8a5a4b6e55322807
                   </Button>
                 </ButtonGroup>
               </Stack>
