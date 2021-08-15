@@ -27,8 +27,10 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
 import ModalSupplier from "../ModalSupplier";
+import ModalEditSupplier from "../ModalEditSupplier ";
+import { BsTrash } from "react-icons/bs";
 function Supplier() {
-  const url = "https://xtendid.herokuapp.com/api/supplier-get";
+  const url = "https://xtendid.herokuapp.com/api/suppliers";
 
   const [suppliers, setSuppliers] = useState([]);
 
@@ -41,15 +43,47 @@ function Supplier() {
     list();
   }, []);
 
-  const renderedSupplier = suppliers.map((supplier) => {
+  const removeData = (id) => {
+    const url = "https://xtendid.herokuapp.com/api/supplier-delete";
+
+    axios.delete(`${url}/${id}`).then((response) => {
+      const del = suppliers.filter((supplier) => id !== supplier.id);
+      setSuppliers(del);
+      console.log("response", response);
+    });
+  };
+
+  const renderedSupplier = suppliers.map((supplier, index) => {
     return (
       <Tbody key={supplier.id}>
         <Tr>
+          <Td>{`${index + 1}`}</Td>
+
+          <Td>{supplier.supplier_id}</Td>
           <Td>{supplier.supplier_name}</Td>
           <Td> {supplier.email} </Td>
           <Td> {supplier.phone} </Td>
           <Td> {supplier.city} </Td>
           <Td> {supplier.country} </Td>
+          <Td>
+            <Flex>
+              <Button
+                mr={2}
+                colorScheme="red"
+                size="sm"
+                type="submit"
+                onClick={() => {
+                  removeData(supplier.id);
+                }}
+              >
+                <BsTrash />
+              </Button>
+              <ModalEditSupplier
+                updateIdSupplier={supplier.id}
+                supplier={supplier}
+              />
+            </Flex>
+          </Td>
         </Tr>
       </Tbody>
     );
@@ -149,6 +183,8 @@ function Supplier() {
               <Table size="md">
                 <Thead>
                   <Tr>
+                    <Th>No</Th>
+                    <Th>Supplier ID</Th>
                     <Th>Supplier Name</Th>
                     <Th>Email</Th>
                     <Th>Contact</Th>

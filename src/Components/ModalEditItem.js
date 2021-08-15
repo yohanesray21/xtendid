@@ -130,6 +130,7 @@ function ModalEditItem({ item, updateIdItem }) {
                     value={`ITM-0${id}`}
                     onChange={(evt) => setCode(evt.target.value)}
                     isRequired
+                    readOnly
                   />
                 </FormControl>
                 <FormControl>
@@ -273,13 +274,13 @@ function ModalEditItem({ item, updateIdItem }) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Link to="/stock/item/:id">
+                <Link to={`/stock/item/${id}`}>
                   <Button
                     size="sm"
                     mr={3}
                     leftIcon={<BiEdit />}
                     detailIdItem="hello"
-                    item={item}
+                    onClick={{ updateID: id }}
                   >
                     Edit in Full Page
                   </Button>

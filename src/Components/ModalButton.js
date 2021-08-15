@@ -152,6 +152,7 @@ function ModalButton({ buttonText, setListItem }) {
                     value={`ITM-0${getId + 1}`}
                     onChange={(evt) => setCode(evt.target.value)}
                     isRequired
+                    readOnly
                   />
                 </FormControl>
                 <FormControl>

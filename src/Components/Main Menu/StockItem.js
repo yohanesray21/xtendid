@@ -81,9 +81,7 @@ function StockItem() {
                     aria-label="Add to friends"
                     icon={<AddIcon />}
                   />
-                  <Button boxShadow="md" mr="px">
-                    Add Item
-                  </Button>
+                  <ModalButton buttonText="Add Item" />
                 </ButtonGroup>
               </Stack>
             </Box>

@@ -14,8 +14,6 @@ import {
   ModalFooter,
   ModalHeader,
   ModalOverlay,
-  Radio,
-  RadioGroup,
   Stack,
   Text,
   useDisclosure,
@@ -23,44 +21,37 @@ import {
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { EditIcon } from "@chakra-ui/icons";
 
-function ModalCustomer({ buttonText, setListCustomers }) {
+function ModalSupplier({ supplier, updateIdSupplier }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [id, setId] = useState("");
-  const [category, setCategory] = useState("Individual");
-  const [companyName, setcompanyName] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [country, setCountry] = useState("");
-  const [province, setProvince] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
-  const [getCustomerId, setGetCustomerId] = useState(null);
+  console.log(supplier);
 
-  const [isLoadingCustomer, setIsLoadingCustomer] = useState(false);
+  const [id, setId] = useState(updateIdSupplier);
+  const [companyName, setCompanyName] = useState(supplier.company_name);
+  const [supplierName, setSupplierName] = useState(supplier.supplier_name);
+  const [email, setEmail] = useState(supplier.email);
+  const [phone, setPhone] = useState(supplier.phone);
+  const [address, setAddress] = useState(supplier.address);
+  const [country, setCountry] = useState(supplier.country);
+  const [province, setProvince] = useState(supplier.province);
+  const [city, setCity] = useState(supplier.city);
+  const [zip, setZip] = useState(supplier.zip_code);
+  const [getSupplierId, setGetSupplierId] = useState(null);
 
-  useEffect(() => {
-    axios
-      .get("https://xtendid.herokuapp.com/api/customer-get-lastid")
-      .then((response) => {
-        setGetCustomerId(response.data.data.last_id);
-      });
-  }, []);
+  const [isLoadingAddSuppplier, setIsLoadingAddSupplier] = useState(false);
 
-  const addCustomer = async () => {
-    const { data } = await axios.post(
-      "https://xtendid.herokuapp.com/api/customer-store",
+  const updateSupplier = async () => {
+    const { data } = await axios.put(
+      `https://xtendid.herokuapp.com/api/supplier-update/${id}`,
       {},
       {
         params: {
           id: id,
-          customer_id: `CUS-00${getCustomerId + 1}`,
-          category: category,
+          supplier_id: `SUP-00${id}`,
           company_name: companyName,
-          customer_name: customerName,
+          supplier_name: supplierName,
           email: email,
           phone: phone,
           address: address,
@@ -71,29 +62,21 @@ function ModalCustomer({ buttonText, setListCustomers }) {
         },
       }
     );
-    const url = "https://xtendid.herokuapp.com/api/customers";
-    const { data: listData } = await axios.get(url, {});
-    setListCustomers(listData.data);
-
-    axios
-      .get("https://xtendid.herokuapp.com/api/customer-get-lastid")
-      .then((response) => {
-        setGetCustomerId(response.data.data.last_id);
-      });
 
     onClose();
   };
 
-  const handleSubmitCustomer = async (evt) => {
+  const handleSubmitSupplier = async (evt) => {
     evt.preventDefault();
     console.log("berhasil");
-    setIsLoadingCustomer(true);
+    setIsLoadingAddSupplier(true);
 
     try {
-      await addCustomer();
+      await updateSupplier();
     } catch (err) {
     } finally {
-      setIsLoadingCustomer(false);
+      setIsLoadingAddSupplier(false);
+      window.location.reload();
     }
   };
 
@@ -102,7 +85,7 @@ function ModalCustomer({ buttonText, setListCustomers }) {
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
-        {buttonText ? buttonText : "Add New Customer"}
+        <EditIcon />
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -114,68 +97,45 @@ function ModalCustomer({ buttonText, setListCustomers }) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Center>Add New Customer</Center>
+            <Center>Add New Supplier</Center>
           </ModalHeader>
           <ModalCloseButton />
           <Box px={5}>
             <hr />
           </Box>
-          <form onSubmit={handleSubmitCustomer}>
+          <form onSubmit={handleSubmitSupplier}>
             <ModalBody pb={4}>
               <Stack p={2}>
-                <RadioGroup defaultValue="company">
-                  <Stack spacing={5} direction="row">
-                    <Radio
-                      colorScheme="green"
-                      value="company"
-                      onChange={(evt) => {
-                        setCategory(evt.target.value);
-                      }}
-                    >
-                      Company
-                    </Radio>
-                    <Radio
-                      colorScheme="green"
-                      value="individual"
-                      onChange={(evt) => {
-                        setCategory(evt.target.value);
-                      }}
-                    >
-                      Individual
-                    </Radio>
-                  </Stack>
-                </RadioGroup>
                 <FormControl>
                   <FormLabel>
                     <Text fontSize="sm" pt={2}>
-                      Customer ID
+                      Supplier ID
                     </Text>
                   </FormLabel>
                   <Input
                     size="sm"
                     bgColor="gray.200"
-                    value={`CUS-00${getCustomerId + 1}`}
+                    value={`SUP-00${id}`}
                     type="text"
                     onChange={(evt) => {
-                      setGetCustomerId(evt.target.value);
+                      setGetSupplierId(evt.target.value);
                     }}
                     isRequired
-                    readOnly
                   />
                 </FormControl>
                 <FormControl>
                   <FormLabel>
                     <Text fontSize="sm" pt={2}>
-                      Customer Name
+                      Supplier Name
                     </Text>
                   </FormLabel>
                   <Input
                     size="sm"
                     bgColor="gray.200"
-                    value={customerName}
+                    value={supplierName}
                     type="text"
                     onChange={(evt) => {
-                      setCustomerName(evt.target.value);
+                      setSupplierName(evt.target.value);
                     }}
                     isRequired
                   />
@@ -192,7 +152,7 @@ function ModalCustomer({ buttonText, setListCustomers }) {
                     value={companyName}
                     type="text"
                     onChange={(evt) => {
-                      setcompanyName(evt.target.value);
+                      setCompanyName(evt.target.value);
                     }}
                     isRequired
                   />
@@ -309,7 +269,7 @@ function ModalCustomer({ buttonText, setListCustomers }) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Link to="/customer/detail">
+                <Link to="/supplier/detail">
                   <Button size="sm" mr={3} leftIcon={<BiEdit />}>
                     Edit in Full Page
                   </Button>
@@ -318,7 +278,7 @@ function ModalCustomer({ buttonText, setListCustomers }) {
                   <Button
                     colorScheme="teal"
                     type="submit"
-                    isLoading={isLoadingCustomer}
+                    isLoading={isLoadingAddSuppplier}
                   >
                     Save
                   </Button>
@@ -332,4 +292,4 @@ function ModalCustomer({ buttonText, setListCustomers }) {
   );
 }
 
-export default ModalCustomer;
+export default ModalSupplier;

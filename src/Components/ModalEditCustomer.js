@@ -23,41 +23,35 @@ import {
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { EditIcon } from "@chakra-ui/icons";
 
-function ModalCustomer({ buttonText, setListCustomers }) {
+function ModalEditCustomer({ customer, updateIdCustomer }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
-  const [id, setId] = useState("");
+  const [id, setId] = useState(updateIdCustomer);
+  console.log(id);
   const [category, setCategory] = useState("Individual");
-  const [companyName, setcompanyName] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [email, setEmail] = useState("");
-  const [phone, setPhone] = useState("");
-  const [address, setAddress] = useState("");
-  const [country, setCountry] = useState("");
-  const [province, setProvince] = useState("");
-  const [city, setCity] = useState("");
-  const [zip, setZip] = useState("");
+  const [companyName, setcompanyName] = useState(customer.company_name);
+  const [customerName, setCustomerName] = useState(customer.customer_name);
+  const [email, setEmail] = useState(customer.email);
+  const [phone, setPhone] = useState(customer.phone);
+  const [address, setAddress] = useState(customer.address);
+  const [country, setCountry] = useState(customer.country);
+  const [province, setProvince] = useState(customer.province);
+  const [city, setCity] = useState(customer.city);
+  const [zip, setZip] = useState(customer.zip_code);
   const [getCustomerId, setGetCustomerId] = useState(null);
 
   const [isLoadingCustomer, setIsLoadingCustomer] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get("https://xtendid.herokuapp.com/api/customer-get-lastid")
-      .then((response) => {
-        setGetCustomerId(response.data.data.last_id);
-      });
-  }, []);
-
-  const addCustomer = async () => {
-    const { data } = await axios.post(
-      "https://xtendid.herokuapp.com/api/customer-store",
+  const updateCustomer = async () => {
+    const { data } = await axios.put(
+      `https://xtendid.herokuapp.com/api/customer-update/${id}`,
       {},
       {
         params: {
           id: id,
-          customer_id: `CUS-00${getCustomerId + 1}`,
+          customer_id: `CUS-00${id}`,
           category: category,
           company_name: companyName,
           customer_name: customerName,
@@ -71,15 +65,6 @@ function ModalCustomer({ buttonText, setListCustomers }) {
         },
       }
     );
-    const url = "https://xtendid.herokuapp.com/api/customers";
-    const { data: listData } = await axios.get(url, {});
-    setListCustomers(listData.data);
-
-    axios
-      .get("https://xtendid.herokuapp.com/api/customer-get-lastid")
-      .then((response) => {
-        setGetCustomerId(response.data.data.last_id);
-      });
 
     onClose();
   };
@@ -90,10 +75,11 @@ function ModalCustomer({ buttonText, setListCustomers }) {
     setIsLoadingCustomer(true);
 
     try {
-      await addCustomer();
+      await updateCustomer();
     } catch (err) {
     } finally {
       setIsLoadingCustomer(false);
+      window.location.reload();
     }
   };
 
@@ -102,7 +88,7 @@ function ModalCustomer({ buttonText, setListCustomers }) {
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
-        {buttonText ? buttonText : "Add New Customer"}
+        <EditIcon />
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -114,7 +100,7 @@ function ModalCustomer({ buttonText, setListCustomers }) {
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
-            <Center>Add New Customer</Center>
+            <Center>Edit Customer</Center>
           </ModalHeader>
           <ModalCloseButton />
           <Box px={5}>
@@ -154,10 +140,10 @@ function ModalCustomer({ buttonText, setListCustomers }) {
                   <Input
                     size="sm"
                     bgColor="gray.200"
-                    value={`CUS-00${getCustomerId + 1}`}
+                    value={`CUS-00${id}`}
                     type="text"
                     onChange={(evt) => {
-                      setGetCustomerId(evt.target.value);
+                      setId(evt.target.value);
                     }}
                     isRequired
                     readOnly
@@ -332,4 +318,4 @@ function ModalCustomer({ buttonText, setListCustomers }) {
   );
 }
 
-export default ModalCustomer;
+export default ModalEditCustomer;

@@ -71,9 +71,7 @@ function Supplier() {
                     aria-label="Add to friends"
                     icon={<AddIcon />}
                   />
-                  <Button boxShadow="md" mr="px">
-                    Add Supplier
-                  </Button>
+                  <ModalSupplier buttonText="Add Supplier" />
                 </ButtonGroup>
               </Stack>
             </Box>
@@ -133,7 +131,7 @@ function Supplier() {
                   <Icon fontSize="80" as={ImUserPlus} />
                   <Text>No Supplier Found</Text>
                   {/* Button */}
-                  <ModalSupplier />
+                  <ModalSupplier buttonText="Add Supplier" />
                 </VStack>
               </Center>
             </Box>

@@ -52,7 +52,7 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
       {},
       {
         params: {
-          supplier_id: `SUP-${getSupplierId + 1}`,
+          supplier_id: `SUP-00${getSupplierId + 1}`,
           company_name: companyName,
           supplier_name: supplierName,
           email: email,
@@ -66,7 +66,7 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
       }
     );
 
-    const url = "https://xtendid.herokuapp.com/api/supplier-get";
+    const url = "https://xtendid.herokuapp.com/api/suppliers";
     const { data: listData } = await axios.get(url, {});
     console.log(listData);
     setListSuppliers(listData.data);
@@ -128,7 +128,7 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
                   <Input
                     size="sm"
                     bgColor="gray.200"
-                    value={`SUP-${getSupplierId + 1}`}
+                    value={`SUP-00${getSupplierId + 1}`}
                     type="text"
                     onChange={(evt) => {
                       setSupplierName(evt.target.value);

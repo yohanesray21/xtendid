@@ -27,6 +27,8 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
 import ModalCustomer from "../ModalCustomer";
+import ModalEditCustomer from "../ModalEditCustomer";
+import { BsTrash } from "react-icons/bs";
 
 function Customer() {
   const [customers, setCustomers] = useState([]);
@@ -34,7 +36,7 @@ function Customer() {
   useEffect(() => {
     const list = async () => {
       const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/customer-get",
+        "https://xtendid.herokuapp.com/api/customers",
         {}
       );
       setCustomers(data.data);
@@ -43,16 +45,46 @@ function Customer() {
     list();
   }, []);
 
-  const renderedCustomer = customers.map((customer) => {
+  const removeData = (id) => {
+    const url = "https://xtendid.herokuapp.com/api/customer-delete";
+
+    axios.delete(`${url}/${id}`).then((response) => {
+      const del = customers.filter((customer) => id !== customer.id);
+      setCustomers(del);
+      console.log("response", response);
+    });
+  };
+
+  const renderedCustomer = customers.map((customer, index) => {
     return (
       <Tbody key={customer.id}>
         <Tr>
+          <Td>{`${index + 1}`}</Td>
           <Td>{customer.customer_name}</Td>
           <Td>{customer.email}</Td>
           <Td>{customer.phone}</Td>
           <Td> {customer.city} </Td>
           <Td> {customer.country} </Td>
           <Td> {customer.company_name} </Td>
+          <Td>
+            <Flex>
+              <Button
+                mr={2}
+                colorScheme="red"
+                size="sm"
+                type="submit"
+                onClick={() => {
+                  removeData(customer.id);
+                }}
+              >
+                <BsTrash />
+              </Button>
+              <ModalEditCustomer
+                updateIdCustomer={customer.id}
+                customer={customer}
+              />
+            </Flex>
+          </Td>
         </Tr>
       </Tbody>
     );
@@ -148,6 +180,7 @@ function Customer() {
               <Table size="md">
                 <Thead>
                   <Tr>
+                    <Th>No</Th>
                     <Th>Name</Th>
                     <Th>Email</Th>
                     <Th>Contact</Th>

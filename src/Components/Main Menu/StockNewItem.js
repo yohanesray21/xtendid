@@ -27,8 +27,13 @@ import { ChevronRightIcon } from "@chakra-ui/icons";
 import { IoHome, IoPrintSharp } from "react-icons/io5";
 import MenuIcon from "../MenuIcon";
 
-function StockNewItem({ detailIdItem, item }) {
-  console.log(detailIdItem);
+const formatNumber = (data) => {
+  const dotRemoved = data.split(".").join("");
+
+  return "Rp " + Intl.NumberFormat("id-Id").format(dotRemoved);
+};
+
+function StockNewItem() {
   return (
     <>
       <TopBar />
