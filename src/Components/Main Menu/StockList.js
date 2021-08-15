@@ -29,9 +29,11 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
 import ModalButton from "../ModalButton";
+import { BsTrash } from "react-icons/bs";
+import ModalEditItem from "../ModalEditItem";
 
 function StockList() {
-  const url = "https://xtendid.herokuapp.com/api/item-get";
+  const url = "https://xtendid.herokuapp.com/api/items";
 
   const [results, setResults] = useState([]);
 
@@ -45,17 +47,50 @@ function StockList() {
     list();
   }, []);
 
-  const renderedResults = results.map((result) => {
+  const removeData = (id) => {
+    const url = "https://xtendid.herokuapp.com/api/item-delete";
+
+    axios.delete(`${url}/${id}`).then((response) => {
+      const del = results.filter((result) => id !== result.id);
+      setResults(del);
+      console.log("response", response);
+    });
+  };
+
+  // const updateData = (id) => {
+  //   const url = "https://xtendid.herokuapp.com/api/item-update";
+
+  //   axios.update(`${url}/${id}`).then((response) => {});
+  // };
+
+  const renderedResults = results.map((result, index) => {
     return (
       <Tbody key={result.id}>
         <Tr>
-          <Td>{result.id}</Td>
+          <Td>{`${index + 1}`}</Td>
+          <Td>{result.item_id}</Td>
           <Td>{result.name}</Td>
           <Td>{result.status}</Td>
           <Td> {result.category} </Td>
           <Td> {result.cost} </Td>
           <Td> {result.sell_price} </Td>
           <Td isNumeric> {result.stock} </Td>
+          <Td>
+            <Flex>
+              <Button
+                mr={2}
+                colorScheme="red"
+                size="sm"
+                type="submit"
+                onClick={() => {
+                  removeData(result.id);
+                }}
+              >
+                <BsTrash />
+              </Button>
+              <ModalEditItem updateIdItem={result.id} item={result} />
+            </Flex>
+          </Td>
         </Tr>
       </Tbody>
     );
@@ -157,6 +192,7 @@ function StockList() {
               <Table size="md">
                 <Thead>
                   <Tr>
+                    <Th>No</Th>
                     <Th>Item Code</Th>
                     <Th>Item Name</Th>
                     <Th>Status</Th>

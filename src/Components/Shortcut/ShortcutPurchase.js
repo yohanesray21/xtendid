@@ -9,7 +9,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { Link } from "react-router-dom";
 import { FaFileInvoiceDollar, FaHistory, FaShoppingBag } from "react-icons/fa";
 import { IoBagCheckSharp } from "react-icons/io5";
 

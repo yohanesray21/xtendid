@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import {
   Box,
   Button,
@@ -22,6 +22,7 @@ import {
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
 import { Link } from "react-router-dom";
+import { EditIcon } from "@chakra-ui/icons";
 
 const formatNumber = (data) => {
   const dotRemoved = data.split(".").join("");
@@ -29,32 +30,24 @@ const formatNumber = (data) => {
   return "Rp " + Intl.NumberFormat("id-Id").format(dotRemoved);
 };
 
-function ModalButton({ buttonText, setListItem }) {
+function ModalEditItem({ item, updateIdItem }) {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [colorSelect, setColorSelect] = useState("black");
-  const [id, setId] = useState("");
+  const [id, setId] = useState(updateIdItem);
+  // console.log(id);
   const [code, setCode] = useState("");
-  const [cost, setCost] = useState("");
-  const [sellPrice, setSellPrice] = useState("");
-  const [name, setName] = useState("");
-  const [category, setCategory] = useState("Service");
-  const [stock, setStock] = useState(null);
-  const [baseUnit, setBaseUnit] = useState("");
-  const [status, setStatus] = useState("");
-  const [getId, setGetId] = useState(null);
+  const [cost, setCost] = useState(`${item.cost}`);
+  const [sellPrice, setSellPrice] = useState(`${item.sell_price}`);
+  const [name, setName] = useState(item.name);
+  const [category, setCategory] = useState(item.category);
+  const [stock, setStock] = useState(item.stock);
+  const [baseUnit, setBaseUnit] = useState(item.baseUnit);
+  const [status, setStatus] = useState(item.status);
 
   const [isLoadingAddItem, setIsLoadingAddItem] = useState(false);
 
-  useEffect(() => {
-    axios
-      .get("https://xtendid.herokuapp.com/api/item-get-lastid")
-      .then((response) => {
-        setGetId(response.data.data.last_id);
-      });
-  }, []);
-
-  const addItem = async () => {
+  const updateItem = async () => {
     const formattedCostToNumber = Number(
       cost.split("Rp ").join("").split(".").join("")
     );
@@ -62,13 +55,13 @@ function ModalButton({ buttonText, setListItem }) {
       sellPrice.split("Rp ").join("").split(".").join("")
     );
 
-    const { data } = await axios.post(
-      "https://xtendid.herokuapp.com/api/item-store",
+    const { data } = await axios.put(
+      `https://xtendid.herokuapp.com/api/item-update/${id}`,
       {},
       {
         params: {
           id: id,
-          item_id: `ITM-0${getId + 1}`,
+          item_id: `ITM-0${id}`,
           cost: formattedCostToNumber,
           sell_price: formattedSellPriceToNumber,
           name: name,
@@ -80,16 +73,6 @@ function ModalButton({ buttonText, setListItem }) {
       }
     );
 
-    const url = "https://xtendid.herokuapp.com/api/items";
-    const { data: listData } = await axios.get(url, {});
-    setListItem(listData.data);
-
-    axios
-      .get("https://xtendid.herokuapp.com/api/item-get-lastid")
-      .then((response) => {
-        setGetId(response.data.data.last_id);
-      });
-
     onClose();
     // setItems(data);
     // console.log(data);
@@ -100,18 +83,13 @@ function ModalButton({ buttonText, setListItem }) {
     setIsLoadingAddItem(true);
 
     try {
-      await addItem();
+      await updateItem();
     } catch (err) {
     } finally {
       setIsLoadingAddItem(false);
+      window.location.reload();
     }
   };
-
-  // Currency
-  // const value = (cost, prefix) => {
-  //   var valueString = cost.replace(/[^, \d]/g, " ").toString(),
-  //   split =
-  // }
 
   const initialRef = React.useRef();
   const finalRef = React.useRef();
@@ -119,7 +97,7 @@ function ModalButton({ buttonText, setListItem }) {
   return (
     <>
       <Button size="sm" colorScheme="teal" onClick={onOpen}>
-        {buttonText ? buttonText : "Create New Item"}
+        <EditIcon />
       </Button>
       <Modal
         initialFocusRef={initialRef}
@@ -149,7 +127,7 @@ function ModalButton({ buttonText, setListItem }) {
                   <Input
                     size="sm"
                     bgColor="gray.200"
-                    value={`ITM-0${getId + 1}`}
+                    value={`ITM-0${id}`}
                     onChange={(evt) => setCode(evt.target.value)}
                     isRequired
                   />
@@ -295,8 +273,14 @@ function ModalButton({ buttonText, setListItem }) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Link to="/stock/item/new">
-                  <Button size="sm" mr={3} leftIcon={<BiEdit />}>
+                <Link to="/stock/item/:id">
+                  <Button
+                    size="sm"
+                    mr={3}
+                    leftIcon={<BiEdit />}
+                    detailIdItem="hello"
+                    item={item}
+                  >
                     Edit in Full Page
                   </Button>
                 </Link>
@@ -318,4 +302,4 @@ function ModalButton({ buttonText, setListItem }) {
   );
 }
 
-export default ModalButton;
+export default ModalEditItem;

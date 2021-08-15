@@ -11,7 +11,7 @@ import Reports from "../Reports";
 
 function MasterData() {
   if (!Cookies.get("authToken")) {
-    return <Redirect to="/login" />;
+    <Redirect to="/login" />;
   }
 
   return (

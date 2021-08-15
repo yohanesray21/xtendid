@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 const Navigation = [{ title: "Master Data" }, { title: "Purchase" }];
 
 function Navbar() {
-  const [nav, setNav] = useState([]);
+  const [nav, setNav] = useState("");
 
   return (
     <>
@@ -33,16 +33,18 @@ function Navbar() {
           </Box>
 
           <Stack p={3}>
-            <Link to="/">
+            <Link
+              to="/"
+              onClick={() => {
+                setNav(Navigation[0].title);
+              }}
+            >
               <HStack
                 p={2}
                 borderRadius="md"
                 _hover={{ bgColor: "teal", color: "white" }}
                 bgColor="white"
                 cursor="pointer"
-                onClick={() => {
-                  setNav(Navigation[0].title);
-                }}
               >
                 <Icon fontSize="xl" as={MdDashboard} />
                 <Text fontSize="md" pl={2}>

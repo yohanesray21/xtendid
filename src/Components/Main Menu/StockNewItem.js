@@ -27,7 +27,8 @@ import { ChevronRightIcon } from "@chakra-ui/icons";
 import { IoHome, IoPrintSharp } from "react-icons/io5";
 import MenuIcon from "../MenuIcon";
 
-function StockNewItem() {
+function StockNewItem({ detailIdItem, item }) {
+  console.log(detailIdItem);
   return (
     <>
       <TopBar />
@@ -98,7 +99,7 @@ function StockNewItem() {
             <Flex>
               <Box w="60%">
                 <Stack p={2}>
-                  <Checkbox colorScheme="teal" defaultIsChecked>
+                  <Checkbox colorScheme="teal" value="1" defaultIsChecked>
                     Flexible
                   </Checkbox>
                   <FormControl>

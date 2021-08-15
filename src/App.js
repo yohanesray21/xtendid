@@ -52,7 +52,7 @@ function App() {
           <Route exact path="/stock/list">
             <StockList />
           </Route>
-          <Route exact path="/stock/item/new">
+          <Route exact path="/stock/item/:id">
             <StockNewItem />
           </Route>
           <Route path="/accounting">

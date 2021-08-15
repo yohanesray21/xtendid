@@ -9,7 +9,6 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { Link } from "react-router-dom";
 import { FaClipboardList } from "react-icons/fa";
 import { RiFolderHistoryLine, RiPlayListAddFill } from "react-icons/ri";
 

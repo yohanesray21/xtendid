@@ -20,7 +20,6 @@ import {
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
-import Supplier from "./Main Menu/Supplier";
 import { Link } from "react-router-dom";
 
 function ModalSupplier({ buttonText, setListSuppliers }) {
