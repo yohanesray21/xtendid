@@ -58,19 +58,7 @@ function ReportsSales() {
           >
             <Icon as={MdDashboard} />
             <Text fontSize="md" pl={2}>
-              Payment List
-            </Text>
-          </HStack>
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Sales History
+              Sales List
             </Text>
           </HStack>
           <HStack

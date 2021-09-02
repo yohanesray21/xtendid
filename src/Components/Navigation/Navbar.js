@@ -106,7 +106,7 @@ function Navbar() {
                 </Text>
               </HStack>
             </Link>
-            <Link to="/accounting">
+            {/* <Link to="/accounting">
               <HStack
                 p={2}
                 borderRadius="md"
@@ -122,7 +122,7 @@ function Navbar() {
                   Accounting
                 </Text>
               </HStack>
-            </Link>
+            </Link> */}
           </Stack>
 
           <Text fontSize="md" pl={3} pt={5} color="gray.500">

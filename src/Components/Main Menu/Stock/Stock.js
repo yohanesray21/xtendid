@@ -1,12 +1,12 @@
 import React from "react";
 import { Box, Container, Flex } from "@chakra-ui/react";
-import TopBar from "../Navigation/TopBar";
-import Navbar from "../Navigation/Navbar";
-import ShortcutSales from "../Shortcut/ShortcutSales";
-import Chart from "../Chart";
-import Reports from "../Reports";
+import TopBar from "../../Navigation/TopBar";
+import Navbar from "../../Navigation/Navbar";
+import ShortcutStock from "../../Shortcut/ShortcutStock";
+import Chart from "../../Chart";
+import Reports from "../../Reports";
 
-function MasterData() {
+function Stock() {
   return (
     <>
       <TopBar />
@@ -18,10 +18,9 @@ function MasterData() {
 
             <Box pl={2} w="full">
               {/* Shortcut */}
-              <ShortcutSales />
+              <ShortcutStock />
               {/* Chart */}
               <Chart />
-
               {/* Reports & Masters */}
               <Reports />
             </Box>
@@ -32,4 +31,4 @@ function MasterData() {
   );
 }
 
-export default MasterData;
+export default Stock;

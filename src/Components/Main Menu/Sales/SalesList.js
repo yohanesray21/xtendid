@@ -19,83 +19,49 @@ import {
   Thead,
   Tr,
   Th,
+  Center,
+  VStack,
   Tbody,
   Td,
+  DarkMode,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 
-import TopBar from "../Navigation/TopBar";
+import TopBar from "../../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
+import { VscNewFile } from "react-icons/vsc";
 import { IoFilter, IoHome } from "react-icons/io5";
+import ModalButton from "../../ModalButton";
 import axios from "axios";
-import ModalButton from "../ModalButton";
-import { BsTrash } from "react-icons/bs";
-import ModalEditItem from "../ModalEditItem";
+import moment from "moment";
 
-function StockList() {
-  const url = "https://xtendid.herokuapp.com/api/items";
-
-  const [results, setResults] = useState([]);
+function SalesList() {
+  const [sales, setSales] = useState([]);
 
   useEffect(() => {
-    const list = async () => {
-      const { data } = await axios.get(url, {});
-      setResults(data.data);
-      console.log(results);
-    };
-
-    list();
+    axios.get("https://xtendid.herokuapp.com/api/so-get").then((response) => {
+      setSales(response.data.data);
+    });
   }, []);
 
-  const removeData = (id) => {
-    const url = "https://xtendid.herokuapp.com/api/item-delete";
-
-    axios.delete(`${url}/${id}`).then((response) => {
-      const del = results.filter((result) => id !== result.id);
-      setResults(del);
-      console.log("response", response);
-    });
-  };
-
-  // const updateData = (id) => {
-  //   const url = "https://xtendid.herokuapp.com/api/item-update";
-
-  //   axios.update(`${url}/${id}`).then((response) => {});
-  // };
-
-  const renderedResults = results.map((result, index) => {
+  const renderSales = sales.map((sale, index) => {
+    const a = moment(sale.created_at).format();
+    console.log(a);
     return (
-      <Tbody key={result.id}>
+      <Tbody key={sale.id}>
         <Tr>
-          <Td>{`${index + 1}`}</Td>
-          <Td>{result.item_id}</Td>
-          <Td>{result.name}</Td>
-          <Td>{result.status}</Td>
-          <Td> {result.category} </Td>
-          <Td> {result.cost} </Td>
-          <Td> {result.sell_price} </Td>
-          <Td isNumeric> {result.stock} </Td>
-          <Td>
-            <Flex>
-              <Button
-                mr={2}
-                colorScheme="red"
-                size="sm"
-                type="submit"
-                onClick={() => {
-                  removeData(result.id);
-                }}
-              >
-                <BsTrash />
-              </Button>
-              <ModalEditItem updateIdItem={result.id} item={result} />
-            </Flex>
-          </Td>
+          <Td>{index + 1}</Td>
+          <Td>{sale.so_id}</Td>
+          <Td>{moment(sale.created_at).format("DD-MM-YYYY")}</Td>
+          <Td>{sale.customer}</Td>
+          <Td>{sale.created_by}</Td>
+          <Td>Rp.{sale.total_price_with_tax},-</Td>
+          <Td>{sale.payment_status}</Td>
+          <Td>{sale.status}</Td>
         </Tr>
       </Tbody>
     );
   });
-
   return (
     <>
       <TopBar />
@@ -118,12 +84,12 @@ function StockList() {
                 </BreadcrumbItem>
 
                 <BreadcrumbItem isCurrentPage>
-                  <Link to="/stock">
-                    <BreadcrumbLink as="span">Stock</BreadcrumbLink>
+                  <Link to="/sales">
+                    <BreadcrumbLink as="span">Sales</BreadcrumbLink>
                   </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink as="span">Item</BreadcrumbLink>
+                  <BreadcrumbLink as="span">List</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
@@ -141,12 +107,12 @@ function StockList() {
                 </Button>
 
                 <ButtonGroup colorScheme="teal" size="sm" isAttached>
-                  <IconButton
-                    boxShadow="md"
-                    aria-label="Add to friends"
-                    icon={<AddIcon />}
-                  />
-                  <ModalButton buttonText="Add Item" setListItem={setResults} />
+                  <IconButton boxShadow="md" icon={<AddIcon />} />
+                  <Link to="/sales/sales-order">
+                    <Button colorScheme="teal" size="sm">
+                      Add New Sales
+                    </Button>
+                  </Link>
                 </ButtonGroup>
               </Stack>
             </Box>
@@ -162,9 +128,10 @@ function StockList() {
           >
             <Flex justifyContent="space-between" justifyItems="center">
               <HStack spacing="10px" px={8}>
-                <Input size="sm" bgColor="gray.200" placeholder="Item Name" />
-                <Input size="sm" bgColor="gray.200" placeholder="Item Code" />
-                <Select
+                <Input size="sm" bgColor="gray.200" placeholder="Customer" />
+                <Input size="sm" bgColor="gray.200" placeholder="Created By" />
+                <Input size="sm" bgColor="gray.200" placeholder="Status" />
+                {/* <Select
                   bgColor="gray.200"
                   color="gray.500"
                   placeholder="Select Category"
@@ -172,7 +139,7 @@ function StockList() {
                 >
                   <option value="option2">Service</option>
                   <option value="option3">Product</option>
-                </Select>
+                </Select> */}
               </HStack>
               <Box px={8} py={6}>
                 <HStack spacing="5px" alignItems="center">
@@ -193,16 +160,16 @@ function StockList() {
                 <Thead>
                   <Tr>
                     <Th>No</Th>
-                    <Th>Item Code</Th>
-                    <Th>Item Name</Th>
+                    <Th>Transaction Code</Th>
+                    <Th>Date</Th>
+                    <Th>Customer</Th>
+                    <Th>Created By</Th>
+                    <Th>Total</Th>
+                    <Th>Payment Status</Th>
                     <Th>Status</Th>
-                    <Th>Product Category</Th>
-                    <Th>Cost</Th>
-                    <Th>Sales Price</Th>
-                    <Th isNumeric>Qty</Th>
                   </Tr>
                 </Thead>
-                {renderedResults}
+                {renderSales}
               </Table>
             </Box>
           </Box>
@@ -212,4 +179,4 @@ function StockList() {
   );
 }
 
-export default StockList;
+export default SalesList;

@@ -47,7 +47,7 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
   }, []);
 
   const addSupplier = async () => {
-    const { data } = await axios.post(
+    await axios.post(
       "https://xtendid.herokuapp.com/api/supplier-store",
       {},
       {

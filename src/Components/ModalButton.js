@@ -21,7 +21,7 @@ import {
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
 const formatNumber = (data) => {
   const dotRemoved = data.split(".").join("");
@@ -30,6 +30,7 @@ const formatNumber = (data) => {
 };
 
 function ModalButton({ buttonText, setListItem }) {
+  const history = useHistory();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   const [colorSelect, setColorSelect] = useState("black");
@@ -62,7 +63,7 @@ function ModalButton({ buttonText, setListItem }) {
       sellPrice.split("Rp ").join("").split(".").join("")
     );
 
-    const { data } = await axios.post(
+    await axios.post(
       "https://xtendid.herokuapp.com/api/item-store",
       {},
       {
@@ -80,6 +81,10 @@ function ModalButton({ buttonText, setListItem }) {
       }
     );
 
+    history.push("/stock/list");
+
+    onClose();
+
     const url = "https://xtendid.herokuapp.com/api/items";
     const { data: listData } = await axios.get(url, {});
     setListItem(listData.data);
@@ -90,7 +95,6 @@ function ModalButton({ buttonText, setListItem }) {
         setGetId(response.data.data.last_id);
       });
 
-    onClose();
     // setItems(data);
     // console.log(data);
   };
@@ -239,7 +243,7 @@ function ModalButton({ buttonText, setListItem }) {
                     <Input
                       size="sm"
                       bgColor="gray.200"
-                      type="text"
+                      type="number"
                       value={sellPrice}
                       onBlur={() => {
                         const formatted = formatNumber(sellPrice);

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Breadcrumb,
@@ -19,18 +19,93 @@ import {
   Thead,
   Tr,
   Th,
-  Center,
-  VStack,
+  Tbody,
+  Td,
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link, useHistory } from "react-router-dom";
 
-import TopBar from "../Navigation/TopBar";
+import TopBar from "../../Navigation/TopBar";
 import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
-import { VscNewFile } from "react-icons/vsc";
 import { IoFilter, IoHome } from "react-icons/io5";
-import ModalButton from "../ModalButton";
+import axios from "axios";
+import ModalButton from "../../ModalButton";
+import { BsTrash } from "react-icons/bs";
+import ModalEditItem from "../../ModalEditItem";
 
-function StockItem() {
+function StockList() {
+  const history = useHistory();
+  const url = "https://xtendid.herokuapp.com/api/items";
+
+  const [results, setResults] = useState([]);
+
+  useEffect(() => {
+    const list = async () => {
+      try {
+        const { data } = await axios.get(url, {});
+
+        setResults(data.data);
+      } catch (err) {
+        if (err.response.data.message === "No Item in database") {
+          history.push("/stock/item");
+        }
+      }
+    };
+
+    list();
+  }, [history]);
+
+  const removeData = (id) => {
+    const url = "https://xtendid.herokuapp.com/api/item-delete";
+    alert("Are you sure to delete this item ?");
+    axios.delete(`${url}/${id}`).then((response) => {
+      const del = results.filter((result) => id !== result.id);
+      setResults(del);
+      console.log("response", response);
+      if (del.length < 1) {
+        history.push("/stock/item");
+      }
+    });
+  };
+
+  // const updateData = (id) => {
+  //   const url = "https://xtendid.herokuapp.com/api/item-update";
+
+  //   axios.update(`${url}/${id}`).then((response) => {});
+  // };
+
+  const renderedResults = results.map((result, index) => {
+    return (
+      <Tbody key={result.id}>
+        <Tr>
+          <Td>{`${index + 1}`}</Td>
+          <Td>{result.item_id}</Td>
+          <Td>{result.name}</Td>
+          <Td>{result.status}</Td>
+          <Td> {result.category} </Td>
+          <Td> {result.cost} </Td>
+          <Td> {result.sell_price} </Td>
+          <Td isNumeric> {result.stock} </Td>
+          <Td>
+            <Flex>
+              <Button
+                mr={2}
+                colorScheme="red"
+                size="sm"
+                type="submit"
+                onClick={() => {
+                  removeData(result.id);
+                }}
+              >
+                <BsTrash />
+              </Button>
+              <ModalEditItem updateIdItem={result.id} item={result} />
+            </Flex>
+          </Td>
+        </Tr>
+      </Tbody>
+    );
+  });
+
   return (
     <>
       <TopBar />
@@ -81,7 +156,7 @@ function StockItem() {
                     aria-label="Add to friends"
                     icon={<AddIcon />}
                   />
-                  <ModalButton buttonText="Add Item" />
+                  <ModalButton buttonText="Add Item" setListItem={setResults} />
                 </ButtonGroup>
               </Stack>
             </Box>
@@ -127,6 +202,7 @@ function StockItem() {
               <Table size="md">
                 <Thead>
                   <Tr>
+                    <Th>No</Th>
                     <Th>Item Code</Th>
                     <Th>Item Name</Th>
                     <Th>Status</Th>
@@ -136,15 +212,8 @@ function StockItem() {
                     <Th isNumeric>Qty</Th>
                   </Tr>
                 </Thead>
+                {renderedResults}
               </Table>
-              <Center my={150}>
-                <VStack p={2}>
-                  <Icon fontSize="80" as={VscNewFile} />
-                  <Text>No Item Found</Text>
-                  {/* Button */}
-                  <ModalButton />
-                </VStack>
-              </Center>
             </Box>
           </Box>
         </Container>
@@ -153,4 +222,4 @@ function StockItem() {
   );
 }
 
-export default StockItem;
+export default StockList;

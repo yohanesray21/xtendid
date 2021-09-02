@@ -14,6 +14,7 @@ import { RiFolderHistoryLine, RiPlayListAddFill } from "react-icons/ri";
 
 import ShortcutItems from "./ShortcutItems";
 import ShortcutCustomer from "./ShortcutCustomer";
+import { Link } from "react-router-dom";
 
 function ShorcutSales() {
   return (
@@ -26,29 +27,31 @@ function ShorcutSales() {
           <ShortcutItems />
           <ShortcutCustomer />
 
-          <Stack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Center>
-              <Icon fontSize="3xl" as={FaClipboardList} />
-            </Center>
-            <Box>
-              <Text fontSize="xl">
-                <Center>2</Center>
-              </Text>
-              <Text>
-                <Center w={160}>Sales List</Center>
-              </Text>
-            </Box>
-          </Stack>
+          <Link to="/sales/list">
+            <Stack
+              w="full"
+              border="1px"
+              borderColor="gray.200"
+              py={6}
+              bgColor="white.100"
+              boxShadow="xs"
+              spacing={4}
+              _hover={{ bgColor: "teal", color: "white" }}
+              borderRadius="md"
+            >
+              <Center>
+                <Icon fontSize="3xl" as={FaClipboardList} />
+              </Center>
+              <Box>
+                <Text fontSize="xl">
+                  <Center>2</Center>
+                </Text>
+                <Text>
+                  <Center w={160}>Sales List</Center>
+                </Text>
+              </Box>
+            </Stack>
+          </Link>
           <Stack
             w="full"
             border="1px"

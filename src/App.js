@@ -4,11 +4,13 @@ import Register from "./Components/Register";
 import MasterData from "./Components/Main Menu/MasterData";
 import Purchase from "./Components/Main Menu/Purchase/Purchase";
 import Bill from "./Components/Main Menu/Purchase/Bill";
-import Sales from "./Components/Main Menu/Sales";
-import Stock from "./Components/Main Menu/Stock";
-import StockItem from "./Components/Main Menu/StockItem";
-import StockList from "./Components/Main Menu/StockList";
-import StockNewItem from "./Components/Main Menu/StockNewItem";
+import Sales from "./Components/Main Menu/Sales/Sales";
+import SalesList from "./Components/Main Menu/Sales/SalesList";
+import SalesOrder from "./Components/Main Menu/Sales/SalesOrder";
+import Stock from "./Components/Main Menu/Stock/Stock";
+import StockItem from "./Components/Main Menu/Stock/StockItem";
+import StockList from "./Components/Main Menu/Stock/StockList";
+import StockNewItem from "./Components/Main Menu/Stock/StockNewItem";
 import Accounting from "./Components/Main Menu/Accounting";
 import Setting from "./Components/Main Menu/Setting";
 import Supplier from "./Components/Main Menu/Supplier";
@@ -40,8 +42,14 @@ function App() {
           <Route path="/purchase/RfQ">
             <Bill />
           </Route>
-          <Route path="/sales">
+          <Route exact path="/sales">
             <Sales />
+          </Route>
+          <Route exact path="/sales/list">
+            <SalesList />
+          </Route>
+          <Route exact path="/sales/sales-order">
+            <SalesOrder />
           </Route>
           <Route exact path="/stock">
             <Stock />

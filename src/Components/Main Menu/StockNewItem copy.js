@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Breadcrumb,
@@ -26,6 +26,10 @@ import TopBar from "../Navigation/TopBar";
 import { ChevronRightIcon } from "@chakra-ui/icons";
 import { IoHome, IoPrintSharp } from "react-icons/io5";
 import MenuIcon from "../MenuIcon";
+import { useParams } from "react-router";
+import axios from "axios";
+import { cos } from "prelude-ls";
+import { stat } from "fs-extra";
 
 const formatNumber = (data) => {
   const dotRemoved = data.split(".").join("");
@@ -34,6 +38,80 @@ const formatNumber = (data) => {
 };
 
 function StockNewItem() {
+  const [colorSelect, setColorSelect] = useState("black");
+  const [id, setId] = useState("");
+  const [cost, setCost] = useState("");
+  const [sellPrice, setSellPrice] = useState("");
+  const [name, setName] = useState("");
+  const [category, setCategory] = useState("");
+  const [stock, setStock] = useState("");
+  const [baseUnit, setBaseUnit] = useState("");
+  const [status, setStatus] = useState("");
+  const [openingStock, setOpeningStock] = useState("");
+  const [minimumStock, setMinimumStock] = useState("");
+  const [taxRate, setTaxRate] = useState("");
+  const [barcode, setBarcode] = useState("");
+  const [brand, setBrand] = useState("");
+  const [description, setDescription] = useState("");
+  const [percentage, setPercentage] = useState("");
+  const [suppliers, setSuppliers] = useState([]);
+  const [supplier, setSupplier] = useState("");
+
+  const params = useParams();
+
+  useEffect(() => {
+    axios
+      .get(`https://xtendid.herokuapp.com/api/item-find/${params.id}`)
+      .then((response) => {
+        setId(response.data.data.item_id);
+        setCost(response.data.data.cost);
+        setSellPrice(response.data.data.sell_price);
+        setName(response.data.data.name);
+        setCategory(response.data.data.category);
+        setStock(response.data.data.stock);
+        setBaseUnit(response.data.data.base_unit);
+        setOpeningStock(response.data.data.opening_stock);
+        setMinimumStock(response.data.data.minimum_stock);
+        setTaxRate(response.data.data.taxRate);
+        setBarcode(response.data.data.barcode);
+        setPercentage(response.data.data.profit_percentage || "");
+      });
+  }, [params.id]);
+
+  useEffect(() => {
+    axios
+      .get("https://xtendid.herokuapp.com/api/suppliers")
+      .then((response) => {
+        setSuppliers(response.data.data);
+      });
+  }, []);
+
+  const handleOnSave = async () => {
+    await axios.put(
+      `https://xtendid.herokuapp.com/api/item-update/${params.id}`,
+      {},
+      {
+        params: {
+          name: name,
+          barcode: barcode,
+          category: category,
+          brand: brand,
+          stock: stock,
+          minimum_stock: minimumStock,
+          base_unit: baseUnit,
+          cost: cost,
+          sell_price: sellPrice,
+          tax_rate: taxRate,
+          status: status,
+          supplier: supplier,
+          opening_stock: openingStock,
+          profit_percentage: percentage,
+          description: description,
+        },
+      }
+    );
+  };
+  // axios.put
   return (
     <>
       <TopBar />
@@ -75,7 +153,12 @@ function StockNewItem() {
                   fontSize="md"
                 />
                 {/* Menu Icon */}
-                <Button size="sm" colorScheme="teal" boxShadow="sm">
+                <Button
+                  size="sm"
+                  colorScheme="teal"
+                  boxShadow="sm"
+                  onClick={handleOnSave}
+                >
                   Save
                 </Button>
               </Stack>
@@ -94,7 +177,7 @@ function StockNewItem() {
             pb={8}
           >
             <Heading size="md" fontWeight="semibold" pt={8} pb={2}>
-              New Item
+              {name}
             </Heading>
             <Box pb={2}>
               <hr />
@@ -113,33 +196,60 @@ function StockNewItem() {
                         Item Code
                       </Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" isRequired />
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      value={id}
+                      isRequired
+                      ReadOnly
+                    />
                   </FormControl>
                   <FormControl>
                     <FormLabel>
                       <Text fontSize="sm">Item Name</Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" />
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      value={name}
+                      onChange={(evt) => setName(evt.target.value)}
+                    />
                   </FormControl>
                   <Flex>
                     <FormControl pr={3}>
                       <FormLabel>
                         <Text fontSize="sm">Product category</Text>
                       </FormLabel>
-                      <Select size="sm" bgColor="gray.200">
+                      <Select
+                        size="sm"
+                        bgColor="gray.200"
+                        value={category}
+                        onChange={(evt) => setCategory(evt.target.value)}
+                      >
                         <option value="option1">Select Product</option>
-                        <option value="option1">Service</option>
-                        <option value="option2">Product</option>
+                        <option value="Service">Service</option>
+                        <option value="Product">Product</option>
                       </Select>
                     </FormControl>
                     <FormControl>
                       <FormLabel>
                         <Text fontSize="sm">Supplier</Text>
                       </FormLabel>
-                      <Select size="sm" bgColor="gray.200">
-                        <option value="option2">Select Supplier</option>
-                        <option value="option1">PT.Karya Maju</option>
-                        <option value="option2">PT. Bersama</option>
+                      <Select
+                        size="sm"
+                        bgColor="gray.200"
+                        value={supplier}
+                        onChange={(evt) => {
+                          setSupplier(evt.target.value);
+                        }}
+                      >
+                        {suppliers?.map((supplier) => {
+                          return (
+                            <option value={supplier.company_name}>
+                              {supplier.company_name}
+                            </option>
+                          );
+                        })}
                       </Select>
                     </FormControl>
                   </Flex>
@@ -163,20 +273,39 @@ function StockNewItem() {
                     <FormLabel>
                       <Text fontSize="sm">Opening Stock</Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      type="number"
+                      value={openingStock}
+                      onChange={(evt) => setOpeningStock(evt.target.value)}
+                    />
                   </FormControl>
                   <FormControl pr={3}>
                     <FormLabel>
                       <Text fontSize="sm">Minimum Stock</Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      type="number"
+                      value={minimumStock}
+                      onChange={(evt) => setMinimumStock(evt.target.value)}
+                    />
                   </FormControl>
                 </HStack>
                 <FormControl w="40%">
                   <FormLabel>
                     <Text fontSize="sm">Tax</Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    type="number"
+                    min="1"
+                    value={taxRate}
+                    onChange={(evt) => setTaxRate(evt.target.value)}
+                  />
                 </FormControl>
               </Flex>
               <Flex alignItems="center">
@@ -185,7 +314,12 @@ function StockNewItem() {
                     <FormLabel>
                       <Text fontSize="sm">Base Unit</Text>
                     </FormLabel>
-                    <Select size="sm" bgColor="gray.200">
+                    <Select
+                      size="sm"
+                      bgColor="gray.200"
+                      value={baseUnit}
+                      onChange={(evt) => setBaseUnit(evt.target.value)}
+                    >
                       <option value="option1">Pcs</option>
                       <option value="option1">Pack</option>
                       <option value="option1">Box</option>
@@ -195,7 +329,13 @@ function StockNewItem() {
                     <FormLabel>
                       <Text fontSize="sm">Cost</Text>
                     </FormLabel>
-                    <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                    <Input
+                      size="sm"
+                      bgColor="gray.200"
+                      type="number"
+                      value={cost}
+                      onChange={(evt) => setCost(evt.target.value)}
+                    />
                   </FormControl>
                   <FormControl w="20%">
                     <FormLabel>
@@ -206,7 +346,14 @@ function StockNewItem() {
                       bgColor="gray.200"
                       type="number"
                       min="1"
+                      max="100"
                       placeholder="%"
+                      value={percentage}
+                      onChange={(evt) => {
+                        if (evt.target.value > 100) {
+                          alert("Tax must be less than or equal 100%");
+                        } else setPercentage(evt.target.value);
+                      }}
                     />
                   </FormControl>
                   <Text fontSize="xl" pr={2} pt={7}>
@@ -217,7 +364,14 @@ function StockNewItem() {
                   <FormLabel>
                     <Text fontSize="sm">Sales Price</Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    type="number"
+                    min="1"
+                    value={sellPrice}
+                    onChange={(evt) => setSellPrice(evt.target.value)}
+                  />
                 </FormControl>
               </Flex>
               <Flex alignItems="center">
@@ -226,12 +380,17 @@ function StockNewItem() {
                     <FormLabel>
                       <Text fontSize="sm">Status</Text>
                     </FormLabel>
-                    <Select size="sm" bgColor="gray.200">
+                    <Select
+                      size="sm"
+                      bgColor="gray.200"
+                      value={status}
+                      onChange={(evt) => setStatus(evt.target.value)}
+                    >
                       <option value="option">Select Status</option>
-                      <option value="available" style={{ color: "green" }}>
+                      <option value="Available" style={{ color: "green" }}>
                         Available
                       </option>
-                      <option value="notAvailable" style={{ color: "red" }}>
+                      <option value="Not Available" style={{ color: "red" }}>
                         Not Available
                       </option>
                     </Select>
@@ -239,9 +398,16 @@ function StockNewItem() {
                 </HStack>
                 <FormControl w="40%">
                   <FormLabel>
-                    <Text fontSize="sm">Sales Price</Text>
+                    <Text fontSize="sm">barcode</Text>
                   </FormLabel>
-                  <Input size="sm" bgColor="gray.200" type="number" min="1" />
+                  <Input
+                    size="sm"
+                    bgColor="gray.200"
+                    type="number"
+                    min="1"
+                    value={barcode}
+                    onChange={(evt) => setBarcode(evt.target.value)}
+                  />
                 </FormControl>
               </Flex>
             </Stack>
@@ -265,18 +431,27 @@ function StockNewItem() {
                 <FormLabel>
                   <Text fontSize="sm">Brand</Text>
                 </FormLabel>
-                <Select size="sm" bgColor="gray.200">
+                <Select
+                  size="sm"
+                  bgColor="gray.200"
+                  value={brand}
+                  onChange={(evt) => setBrand(evt.target.value)}
+                >
                   <option value="option1">Select Brand</option>
-                  <option value="option1">Adidas</option>
-                  <option value="option1">Nike</option>
-                  <option value="option2">Puma</option>
+                  <option value="Adidas">Adidas</option>
+                  <option value="Nike">Nike</option>
+                  <option value="Puma">Puma</option>
                 </Select>
               </FormControl>
               <FormControl pr={3}>
                 <FormLabel>
-                  <Text fontSize="sm">Brand</Text>
+                  <Text fontSize="sm">Description</Text>
                 </FormLabel>
-                <Textarea bgColor="gray.200" />
+                <Textarea
+                  bgColor="gray.200"
+                  value={description}
+                  onChange={(evt) => setDescription(evt.target.value)}
+                />
               </FormControl>
             </Stack>
           </Box>
