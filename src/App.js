@@ -7,6 +7,8 @@ import Bill from "./Components/Main Menu/Purchase/Bill";
 import Sales from "./Components/Main Menu/Sales/Sales";
 import SalesList from "./Components/Main Menu/Sales/SalesList";
 import SalesOrder from "./Components/Main Menu/Sales/SalesOrder";
+import SalesOrderSaved from "./Components/Main Menu/Sales/SalesOrderSaved";
+import SalesOrderDelivery from "./Components/Main Menu/Sales/SalesOrderDelivery";
 import Stock from "./Components/Main Menu/Stock/Stock";
 import StockItem from "./Components/Main Menu/Stock/StockItem";
 import StockList from "./Components/Main Menu/Stock/StockList";
@@ -50,6 +52,12 @@ function App() {
           </Route>
           <Route exact path="/sales/sales-order">
             <SalesOrder />
+          </Route>
+          <Route exact path="/sales/sales-order/:id">
+            <SalesOrderSaved />
+          </Route>
+          <Route exact path="/sales/sales-order/:id/delivery">
+            <SalesOrderDelivery />
           </Route>
           <Route exact path="/stock">
             <Stock />

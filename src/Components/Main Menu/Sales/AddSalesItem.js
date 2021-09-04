@@ -90,11 +90,11 @@ function AddItemSales({ salesId, setListItemOrder, setTotalItemOrder }) {
     setListItemOrder(listData.data);
     setTotalItemOrder(listData.param);
 
-    axios
-      .get("https://xtendid.herokuapp.com/api/item-so-calculate/")
-      .then((response) => {
-        setItems(response.data.data.name);
-      });
+    // axios
+    //   .get("https://xtendid.herokuapp.com/api/item-so-calculate/")
+    //   .then((response) => {
+    //     setItems(response.data.data.name);
+    //   });
 
     // setItems(data);
     // console.log(data);

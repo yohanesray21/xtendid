@@ -29,22 +29,24 @@ import {
   VStack,
   Divider,
 } from "@chakra-ui/react";
-import TopBar from "../../Navigation/TopBar";
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import { IoHome, IoPrintSharp } from "react-icons/io5";
-import { AiOutlineCheckCircle } from "react-icons/ai";
-import { RiBillLine } from "react-icons/ri";
-import { BsTrash } from "react-icons/bs";
-import MenuIcon from "../../MenuIcon";
-import { useHistory } from "react-router-dom";
 
-import ModalDetailDelivery from "./ModalDetailDelivery";
+import TopBar from "../../Navigation/TopBar";
 import AddSalesItem from "./AddSalesItem";
 
+import { ChevronRightIcon } from "@chakra-ui/icons";
+import { IoHome } from "react-icons/io5";
+import { BsTrash } from "react-icons/bs";
+import { FaTruck } from "react-icons/fa";
+
+import { useParams, useHistory } from "react-router-dom";
+
 import axios from "axios";
-function SalesOrder() {
+
+function SalesOrderSaved() {
+  const [isEdit, setIsEdit] = useState(false);
+  const history = useHistory();
+
   const [customers, setCustomers] = useState([]);
-  const [lastId, setLastId] = useState("");
   const [items, setItems] = useState([]);
   const [calculate, setCalculate] = useState({});
   const [customerId, setCustomerId] = useState({});
@@ -52,20 +54,37 @@ function SalesOrder() {
   const [expirationDate, setExpirationDate] = useState("");
   const [paymentTerm, setPaymentTerm] = useState("");
   const [isLoadingCreateSO, setIsLoadingCreateSO] = useState(false);
-  const [readOnly, setReadOnly] = useState(false);
 
-  const history = useHistory();
+  const params = useParams();
+  const orderIdSaved = params.id;
 
   useEffect(() => {
-    const lastId = async () => {
+    const listItem = async () => {
       const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/so-get-lastid"
+        `https://xtendid.herokuapp.com/api/item-so-get/${orderIdSaved}`
       );
 
-      setLastId(data.data.last_id);
+      setItems(data.data);
+      setCalculate(data.param);
     };
 
-    lastId();
+    listItem();
+  }, [orderIdSaved]);
+
+  useEffect(() => {
+    const listSO = async () => {
+      const { data } = await axios.get(
+        "https://xtendid.herokuapp.com/api/so-orderby/id"
+      );
+      const orderFound = data.data.find((data) => {
+        return data.id + "" === params.id;
+      });
+
+      setCustomer(orderFound.customer_id);
+      setExpirationDate(orderFound.expiration_date.split(" ")[0]);
+      setPaymentTerm(orderFound.due_date);
+    };
+    listSO();
   }, []);
 
   useEffect(() => {
@@ -80,47 +99,28 @@ function SalesOrder() {
     listCustomer();
   }, []);
 
-  useEffect(() => {
-    const listItem = async () => {
-      const { data } = await axios.get(
-        `https://xtendid.herokuapp.com/api/item-so-get/${lastId + 1}`
-      );
-
-      setItems(data.data);
-      setCalculate(data.param);
-    };
-
-    if (lastId) {
-      listItem();
-    }
-  }, [lastId]);
-
   const handleOnSave = async () => {
     setIsLoadingCreateSO(true);
-    await axios.post(
-      "https://xtendid.herokuapp.com/api/so-store",
+
+    await axios.patch(
+      `https://xtendid.herokuapp.com/api/so-change/${orderIdSaved}`,
       {},
       {
         params: {
-          so_id: `SO-00${lastId + 1}`,
+          // so_id: `SO-00${orderIdSaved + 1}`,
           customer_id: customerId.id,
           expiration_date: expirationDate,
-          // description: Instalasi CCTV Asus RC MDN,
           due_date: paymentTerm,
           total_price_with_tax: calculate.total_price_with_tax,
           total_tax: calculate.total_tax,
           total_price: calculate.total_price,
-          // created_by: admin,
-          // payment_status: Not Paid Yet,
-          // status: Sales Order,
-          // customer: customerId.customer_name,
         },
       }
     );
-    history.push(`/sales/sales-order/${lastId + 1}`);
 
     setIsLoadingCreateSO(false);
-    alert("Create SO Successful");
+    setIsEdit(false);
+    alert("Edit SO Successful");
   };
 
   const renderedItem = items.map((item) => {
@@ -146,9 +146,7 @@ function SalesOrder() {
                   `https://xtendid.herokuapp.com/api/item-so-delete/${item.id}`
                 );
 
-                const url = `https://xtendid.herokuapp.com/api/item-so-get/${
-                  lastId + 1
-                }`;
+                const url = `https://xtendid.herokuapp.com/api/item-so-get/${orderIdSaved}`;
                 const { data: listData } = await axios.get(url, {});
                 setItems(listData.data);
                 setCalculate(listData.param);
@@ -183,7 +181,7 @@ function SalesOrder() {
                   <BreadcrumbLink href="#">Sales</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">New Sales Orders</BreadcrumbLink>
+                  <BreadcrumbLink href="#">Sales Orders</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
@@ -201,13 +199,34 @@ function SalesOrder() {
                 {/* <Button leftIcon={<RiBillLine />} size="sm" boxShadow="sm">
                   Create Bill
                 </Button>
-                <Button
+                */}
+                {/* <Button
                   leftIcon={<AiOutlineCheckCircle />}
                   size="sm"
                   boxShadow="sm"
                 >
                   Confirm Order
-                </Button> */}
+                </Button>  */}
+                <Button
+                  size="sm"
+                  boxShadow="sm"
+                  colorScheme="blue"
+                  onClick={() => {
+                    setIsEdit((isEdit) => !isEdit);
+                  }}
+                >
+                  {isEdit ? "Cancel Edit" : "Edit"}
+                </Button>
+                <Button
+                  leftIcon={<FaTruck />}
+                  size="sm"
+                  boxShadow="sm"
+                  onClick={() => {
+                    history.push(`/sales/sales-order/${orderIdSaved}/delivery`);
+                  }}
+                >
+                  Delivery
+                </Button>
                 <Button
                   size="sm"
                   colorScheme="teal"
@@ -234,10 +253,10 @@ function SalesOrder() {
             pb={8}
           >
             <Heading size="md" fontWeight="semibold" pt={8} pb={2}>
-              New Sales Order
+              Sales Order
             </Heading>
             <Heading size="xl" fontWeight="semibold" pl={3} pb={2}>
-              SO-00{lastId + 1}
+              SO-00{orderIdSaved}
             </Heading>
             <Box pb={2}>
               <hr />
@@ -269,6 +288,7 @@ function SalesOrder() {
 
                           setCustomer(evt.target.value);
                         }}
+                        pointerEvents={isEdit ? "fill" : "none"}
                       >
                         <option value="">Select Customer</option>
                         {customers?.map((customer) => {
@@ -278,25 +298,6 @@ function SalesOrder() {
                             </option>
                           );
                         })}
-                        {/* const renderedCustomer = customers.map((customer) => {
-                          return (
-                            <option
-                              value={customer.customer_id}
-                              onChange={(evt) =>{
-                                axios
-                                  .get(
-                                    `https://xtendid.herokuapp.com/api/customer-find/${evt.target.value}`
-                                  )
-                                  .then((response) => {
-                                    setCustomers(response.data.data);
-                                  })
-                                  setCustomersId(evt.target.value)
-                              }}
-                            >
-                              {customer.customer_name}
-                            </option>
-                          );
-                        }); */}
                       </Select>
                     </FormControl>
 
@@ -312,20 +313,13 @@ function SalesOrder() {
                         type="date"
                         value={expirationDate}
                         onChange={(evt) => setExpirationDate(evt.target.value)}
+                        pointerEvents={isEdit ? "fill" : "none"}
                       />
                     </FormControl>
                   </HStack>
                   <HStack>
                     <FormControl pr={10}>
-                      <FormLabel>
-                        {/* <Text fontSize="sm" pt={2}>
-                          Due Date
-                        </Text> */}
-                      </FormLabel>
-                      {/* <Select size="sm" bgColor="gray.200">
-                        <option value="option1">Service</option>
-                        <option value="option2">Product</option>
-                      </Select> */}
+                      <FormLabel></FormLabel>
                     </FormControl>
 
                     <FormControl>
@@ -340,6 +334,7 @@ function SalesOrder() {
                         type="date"
                         value={paymentTerm}
                         onChange={(evt) => setPaymentTerm(evt.target.value)}
+                        pointerEvents={isEdit ? "fill" : "none"}
                       />
                     </FormControl>
                   </HStack>
@@ -362,7 +357,7 @@ function SalesOrder() {
                     <Tr>
                       <Td>
                         <AddSalesItem
-                          salesId={lastId + 1}
+                          salesId={orderIdSaved}
                           setListItemOrder={setItems}
                           setTotalItemOrder={setCalculate}
                         />
@@ -391,28 +386,7 @@ function SalesOrder() {
             pb={20}
           >
             <Flex>
-              <Box w="40%">
-                {/* <FormControl>
-                  <FormLabel>
-                    <Text fontSize="sm">Select Account Payment</Text>
-                  </FormLabel>
-                  <Select size="sm" bgColor="gray.200">
-                    <option value="option1">BNI</option>
-                    <option value="option2">Mandiri</option>
-                  </Select>
-                </FormControl>
-                <FormControl id="email">
-                  <FormLabel>
-                    <Text fontSize="sm" pt={2}>
-                      Description
-                    </Text>
-                  </FormLabel>
-                  <Textarea
-                    placeholder="Here is a sample placeholder"
-                    bgColor="gray.200"
-                  />
-                </FormControl> */}
-              </Box>
+              <Box w="40%"></Box>
               <Spacer />
               <VStack w="40%" spacing={12}>
                 <Box>
@@ -436,52 +410,7 @@ function SalesOrder() {
                     </Tbody>
                   </Table>
                 </Box>
-                {/* <Box>
-                  <Table variant="unstyled" size="sm">
-                    <Tbody>
-                      <Tr>
-                        <Th fontSize="md">Amount: </Th>
-                        <Td fontSize="md">
-                          <Input
-                            size="sm"
-                            bgColor="gray.200"
-                            value="Rp. 10.000.000,-"
-                          />
-                        </Td>
-                      </Tr>
-                      <Divider pt={2} />
-                      <Tr>
-                        <Td fontSize="lg">Credit:</Td>
-                        <Th fontSize="lg">Rp. 1.200.000,-</Th>
-                      </Tr>
-                    </Tbody>
-                  </Table>
-                </Box> */}
               </VStack>
-              {/* <Box p="4" bgColor="green.50">
-                <VStack justifyItems="">
-                  <HStack>
-                    <Text fontWeight="bold" pl={1} pr={8}>
-                      Untaxed Amount:{" "}
-                    </Text>
-                    <Spacer />
-                    <Text>Rp. 12.000.000,-</Text>
-                  </HStack>
-                  <HStack>
-                    <Text fontWeight="bold" pl={14} >
-                      Taxes:
-                    </Text>
-                    <Spacer />
-                    <Text>Rp. 12.000.000,-</Text>
-                  </HStack>
-                  <HStack>
-                    <Text fontWeight="bold" pr={8}>
-                      Taxes:{" "}
-                    </Text>
-                    <Text>Rp. 12.000.000,-</Text>
-                  </HStack>
-                </VStack>
-              </Box> */}
             </Flex>
           </Box>
         </Container>
@@ -490,4 +419,4 @@ function SalesOrder() {
   );
 }
 
-export default SalesOrder;
+export default SalesOrderSaved;
