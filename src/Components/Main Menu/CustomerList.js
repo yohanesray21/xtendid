@@ -29,30 +29,41 @@ import axios from "axios";
 import ModalCustomer from "../ModalCustomer";
 import ModalEditCustomer from "../ModalEditCustomer";
 import { BsTrash } from "react-icons/bs";
+import { useHistory } from "react-router";
 
 function Customer() {
   const [customers, setCustomers] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     const list = async () => {
-      const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/customers",
-        {}
-      );
-      setCustomers(data.data);
+      try {
+        const { data } = await axios.get(
+          "https://xtendid.herokuapp.com/api/customers",
+          {}
+        );
+        setCustomers(data.data);
+      } catch (err) {
+        if (err.response.data.message === "No Customer in database") {
+          history.push("/customer");
+        }
+      }
     };
-    console.log(customers);
+
     list();
-  }, []);
+  }, [history]);
 
   const removeData = (id) => {
     const url = "https://xtendid.herokuapp.com/api/customer-delete";
 
-    axios.delete(`${url}/${id}`).then((response) => {
-      const del = customers.filter((customer) => id !== customer.id);
-      setCustomers(del);
-      console.log("response", response);
-    });
+    const confirmation = window.confirm("Are you sure to delete customer?");
+    if (confirmation) {
+      axios.delete(`${url}/${id}`).then((response) => {
+        const del = customers.filter((customer) => id !== customer.id);
+        setCustomers(del);
+        console.log("response", response);
+      });
+    }
   };
 
   const renderedCustomer = customers.map((customer, index) => {

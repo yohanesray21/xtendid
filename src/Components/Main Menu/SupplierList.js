@@ -29,28 +29,41 @@ import axios from "axios";
 import ModalSupplier from "../ModalSupplier";
 import ModalEditSupplier from "../ModalEditSupplier ";
 import { BsTrash } from "react-icons/bs";
+import { useHistory } from "react-router";
 function Supplier() {
   const url = "https://xtendid.herokuapp.com/api/suppliers";
 
   const [suppliers, setSuppliers] = useState([]);
+  const history = useHistory();
 
   useEffect(() => {
     const list = async () => {
-      const { data } = await axios.get(url, {});
-      setSuppliers(data.data);
+      try {
+        const { data } = await axios.get(url, {});
+        setSuppliers(data.data);
+      } catch (err) {
+        if (err.response.data.message === "No Supplier in database") {
+          history.push("/supplier");
+        }
+      }
     };
 
     list();
-  }, []);
+  }, [history]);
 
   const removeData = (id) => {
     const url = "https://xtendid.herokuapp.com/api/supplier-delete";
-
-    axios.delete(`${url}/${id}`).then((response) => {
-      const del = suppliers.filter((supplier) => id !== supplier.id);
-      setSuppliers(del);
-      console.log("response", response);
-    });
+    const confirmation = window.confirm("Are you sure to delete supplier?");
+    if (confirmation) {
+      axios.delete(`${url}/${id}`).then((response) => {
+        const del = suppliers.filter((supplier) => id !== supplier.id);
+        setSuppliers(del);
+        console.log("response", response);
+        if (del.length < 1) {
+          history.push("/supplier");
+        }
+      });
+    }
   };
 
   const renderedSupplier = suppliers.map((supplier, index) => {

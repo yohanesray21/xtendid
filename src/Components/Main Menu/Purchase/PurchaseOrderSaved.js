@@ -9,13 +9,11 @@ import {
   Flex,
   FormControl,
   Icon,
-  IconButton,
   Input,
   Stack,
   Text,
   Heading,
   FormLabel,
-  Textarea,
   HStack,
   Select,
   Table,
@@ -24,103 +22,95 @@ import {
   Th,
   Tbody,
   Td,
-  Tfoot,
   Spacer,
   VStack,
   Divider,
 } from "@chakra-ui/react";
 import TopBar from "../../Navigation/TopBar";
 import { ChevronRightIcon } from "@chakra-ui/icons";
-import { IoHome, IoPrintSharp } from "react-icons/io5";
-import { AiOutlineCheckCircle } from "react-icons/ai";
-import { RiBillLine } from "react-icons/ri";
+import { IoHome } from "react-icons/io5";
 import { BsTrash } from "react-icons/bs";
-import MenuIcon from "../../MenuIcon";
-import { useHistory } from "react-router-dom";
+import { useHistory, useParams } from "react-router-dom";
 
-import ModalDetailDelivery from "./ModalDetailDelivery";
-import AddSalesItem from "./AddSalesItem";
+// import ModalDetailDelivery from "./ModalDetailDelivery";
+import AddPurchaseItem from "./AddPurchaseItem";
 
 import axios from "axios";
-function SalesOrder() {
-  const [customers, setCustomers] = useState([]);
-  const [lastId, setLastId] = useState("");
+import { AiOutlineCheckCircle } from "react-icons/ai";
+function PurchaseOrder() {
+  const [isEdit, setIsEdit] = useState(false);
+
+  const [suppliers, setSuppliers] = useState([]);
   const [items, setItems] = useState([]);
   const [calculate, setCalculate] = useState({});
-  const [customerId, setCustomerId] = useState({});
-  const [customer, setCustomer] = useState("");
-  const [expirationDate, setExpirationDate] = useState("");
-  const [paymentTerm, setPaymentTerm] = useState("");
-  const [isLoadingCreateSO, setIsLoadingCreateSO] = useState(false);
-  const [readOnly, setReadOnly] = useState(false);
+  const [supplierId, setSupplierId] = useState({});
+  const [supplier, setSupplier] = useState("");
+  const [receiptDate, setReceiptDate] = useState("");
+  const [isLoadingCreatePO, setIsLoadingCreatePO] = useState(false);
 
   const history = useHistory();
-
-  useEffect(() => {
-    const lastId = async () => {
-      const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/so-get-lastid"
-      );
-
-      setLastId(data.data.last_id);
-    };
-
-    lastId();
-  }, []);
-
-  useEffect(() => {
-    const listCustomer = async () => {
-      const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/customers",
-        {}
-      );
-      setCustomers(data.data);
-    };
-
-    listCustomer();
-  }, []);
+  const params = useParams();
+  const purchaseIdSaved = params.id;
 
   useEffect(() => {
     const listItem = async () => {
       const { data } = await axios.get(
-        `https://xtendid.herokuapp.com/api/item-so-get/${lastId + 1}`
+        `https://xtendid.herokuapp.com/api/item-po-get/${purchaseIdSaved}`
       );
-
       setItems(data.data);
       setCalculate(data.param);
     };
+    listItem();
+  }, [purchaseIdSaved]);
 
-    if (lastId) {
-      listItem();
-    }
-  }, [lastId]);
+  useEffect(() => {
+    const listPO = async () => {
+      const { data } = await axios.get(
+        "https://xtendid.herokuapp.com/api/po-orderby/id"
+      );
+
+      const purchaseFound = data.data.find((data) => {
+        return data.id + "" === params.id;
+      });
+
+      setSupplier(purchaseFound.supplier_id);
+      setReceiptDate(purchaseFound.receipt_date.split(" ")[0]);
+    };
+
+    listPO();
+  }, []);
+
+  useEffect(() => {
+    const listSupplier = async () => {
+      const { data } = await axios.get(
+        "https://xtendid.herokuapp.com/api/suppliers",
+        {}
+      );
+      setSuppliers(data.data);
+    };
+
+    listSupplier();
+  }, []);
 
   const handleOnSave = async () => {
-    setIsLoadingCreateSO(true);
-    await axios.post(
-      "https://xtendid.herokuapp.com/api/so-store",
+    setIsLoadingCreatePO(true);
+    await axios.patch(
+      `https://xtendid.herokuapp.com/api/po-change/${purchaseIdSaved}`,
       {},
       {
         params: {
-          so_id: `SO-00${lastId + 1}`,
-          customer_id: customerId.id,
-          expiration_date: expirationDate,
-          // description: Instalasi CCTV Asus RC MDN,
-          due_date: paymentTerm,
+          supplier_id: supplierId.id,
+          receipt_date: receiptDate,
           total_price_with_tax: calculate.total_price_with_tax,
           total_tax: calculate.total_tax,
           total_price: calculate.total_price,
-          // created_by: admin,
-          // payment_status: Not Paid Yet,
-          // status: Sales Order,
-          // customer: customerId.customer_name,
         },
       }
     );
-    history.push(`/sales/sales-order/${lastId + 1}`);
 
-    setIsLoadingCreateSO(false);
-    alert("Create SO Successful");
+    setIsLoadingCreatePO(false);
+    setIsEdit(false);
+    alert("Edit PO Successful");
   };
 
   const renderedItem = items.map((item) => {
@@ -143,17 +133,13 @@ function SalesOrder() {
 
               if (confirmation) {
                 await axios.delete(
-                  `https://xtendid.herokuapp.com/api/item-so-delete/${item.id}`
+                  `https://xtendid.herokuapp.com/api/item-po-delete/${item.id}`
                 );
 
-                const url = `https://xtendid.herokuapp.com/api/item-so-get/${
-                  lastId + 1
-                }`;
+                const url = `https://xtendid.herokuapp.com/api/item-po-get/${purchaseIdSaved}`;
                 const { data: listData } = await axios.get(url, {});
-                if (!listData.data.status === "failed") {
-                  setItems(listData.data);
-                  setCalculate(listData.param);
-                }
+                setItems(listData.data);
+                setCalculate(listData.param);
               }
             }}
           />
@@ -176,16 +162,16 @@ function SalesOrder() {
                 alignItems="center"
               >
                 <BreadcrumbItem>
-                  <BreadcrumbLink href="/">
+                  <BreadcrumbLink href="#">
                     <Icon fontSize="2xl" as={IoHome} />
                   </BreadcrumbLink>
                 </BreadcrumbItem>
 
-                <BreadcrumbItem>
-                  <BreadcrumbLink href="/sales">Sales</BreadcrumbLink>
+                <BreadcrumbItem isCurrentPage>
+                  <BreadcrumbLink href="#">Purchase</BreadcrumbLink>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
-                  <BreadcrumbLink href="#">New Sales Orders</BreadcrumbLink>
+                  <BreadcrumbLink href="#">Purchase Orders</BreadcrumbLink>
                 </BreadcrumbItem>
               </Breadcrumb>
             </Box>
@@ -212,12 +198,34 @@ function SalesOrder() {
                 </Button> */}
                 <Button
                   size="sm"
+                  boxShadow="sm"
+                  colorScheme="blue"
+                  onClick={() => {
+                    setIsEdit((isEdit) => !isEdit);
+                  }}
+                >
+                  {isEdit ? "Cancel Edit" : "Edit"}
+                </Button>
+                <Button
+                  leftIcon={<AiOutlineCheckCircle />}
+                  size="sm"
+                  boxShadow="sm"
+                  onClick={() => {
+                    history.push(
+                      `/purchase/purchase-order/${purchaseIdSaved}/receive`
+                    );
+                  }}
+                >
+                  Receive Item
+                </Button>
+                <Button
+                  size="sm"
                   colorScheme="teal"
                   boxShadow="sm"
                   onClick={handleOnSave}
-                  isLoading={isLoadingCreateSO}
+                  isLoading={isLoadingCreatePO}
                 >
-                  Create Sales Order
+                  Save
                 </Button>
                 {/* <ModalDetailDelivery /> */}
               </Stack>
@@ -236,10 +244,10 @@ function SalesOrder() {
             pb={8}
           >
             <Heading size="md" fontWeight="semibold" pt={8} pb={2}>
-              New Sales Order
+              Purchase Order
             </Heading>
             <Heading size="xl" fontWeight="semibold" pl={3} pb={2}>
-              SO-00{lastId + 1}
+              PO-00{purchaseIdSaved}
             </Heading>
             <Box pb={2}>
               <hr />
@@ -253,30 +261,31 @@ function SalesOrder() {
                     <FormControl pr={10}>
                       <FormLabel>
                         <Text fontSize="sm" pt={2}>
-                          Customer
+                          Supplier
                         </Text>
                       </FormLabel>
                       <Select
                         size="sm"
                         bgColor="gray.200"
-                        value={customer}
+                        value={supplier}
                         onChange={(evt) => {
                           axios
                             .get(
-                              `https://xtendid.herokuapp.com/api/customer-find/${evt.target.value}`
+                              `https://xtendid.herokuapp.com/api/supplier-find/${evt.target.value}`
                             )
                             .then((response) => {
-                              setCustomerId(response.data.data);
+                              setSupplierId(response.data.data);
                             });
 
-                          setCustomer(evt.target.value);
+                          setSupplier(evt.target.value);
                         }}
+                        pointerEvents={isEdit ? "fill" : "none"}
                       >
-                        <option value="">Select Customer</option>
-                        {customers?.map((customer) => {
+                        <option value="">Select Supllier</option>
+                        {suppliers?.map((supplier) => {
                           return (
-                            <option value={customer.id}>
-                              {customer.customer_name}
+                            <option value={supplier.id}>
+                              {supplier.supplier_name}
                             </option>
                           );
                         })}
@@ -305,15 +314,16 @@ function SalesOrder() {
                     <FormControl>
                       <FormLabel>
                         <Text fontSize="sm" pt={2}>
-                          Expiration Date
+                          Receipt Date
                         </Text>
                       </FormLabel>
                       <Input
                         size="sm"
                         bgColor="gray.200"
                         type="date"
-                        value={expirationDate}
-                        onChange={(evt) => setExpirationDate(evt.target.value)}
+                        value={receiptDate}
+                        onChange={(evt) => setReceiptDate(evt.target.value)}
+                        pointerEvents={isEdit ? "fill" : "none"}
                       />
                     </FormControl>
                   </HStack>
@@ -328,21 +338,6 @@ function SalesOrder() {
                         <option value="option1">Service</option>
                         <option value="option2">Product</option>
                       </Select> */}
-                    </FormControl>
-
-                    <FormControl>
-                      <FormLabel>
-                        <Text fontSize="sm" pt={2}>
-                          Payment Term
-                        </Text>
-                      </FormLabel>
-                      <Input
-                        size="sm"
-                        bgColor="gray.200"
-                        type="date"
-                        value={paymentTerm}
-                        onChange={(evt) => setPaymentTerm(evt.target.value)}
-                      />
                     </FormControl>
                   </HStack>
                 </Stack>
@@ -363,11 +358,15 @@ function SalesOrder() {
 
                     <Tr>
                       <Td>
-                        <AddSalesItem
-                          salesId={lastId + 1}
-                          setListItemOrder={setItems}
-                          setTotalItemOrder={setCalculate}
-                        />
+                        {isEdit ? (
+                          <AddPurchaseItem
+                            purchaseId={purchaseIdSaved}
+                            setListItemOrder={setItems}
+                            setTotalItemOrder={setCalculate}
+                          />
+                        ) : (
+                          " "
+                        )}
                       </Td>
 
                       <Td></Td>
@@ -426,4 +425,4 @@ function SalesOrder() {
   );
 }
 
-export default SalesOrder;
+export default PurchaseOrder;

@@ -9,6 +9,8 @@ import {
   Text,
 } from "@chakra-ui/react";
 
+import { Link } from "react-router-dom";
+
 import { FaFileInvoiceDollar, FaHistory, FaShoppingBag } from "react-icons/fa";
 import { IoBagCheckSharp } from "react-icons/io5";
 
@@ -70,29 +72,31 @@ function ShorcutPurchase() {
               </Text>
             </Box>
           </Stack>
-          <Stack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Center>
-              <Icon fontSize="3xl" as={FaFileInvoiceDollar} />
-            </Center>
-            <Box>
-              <Text fontSize="xl">
-                <Center>4</Center>
-              </Text>
-              <Text>
-                <Center w={160}>Payment List</Center>
-              </Text>
-            </Box>
-          </Stack>
+          <Link to="purchase/list">
+            <Stack
+              w="full"
+              border="1px"
+              borderColor="gray.200"
+              py={6}
+              bgColor="white.100"
+              boxShadow="xs"
+              spacing={4}
+              _hover={{ bgColor: "teal", color: "white" }}
+              borderRadius="md"
+            >
+              <Center>
+                <Icon fontSize="3xl" as={FaFileInvoiceDollar} />
+              </Center>
+              <Box>
+                <Text fontSize="xl">
+                  <Center>4</Center>
+                </Text>
+                <Text>
+                  <Center w={160}>Purchase List</Center>
+                </Text>
+              </Box>
+            </Stack>
+          </Link>
 
           <Stack
             w="full"

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Breadcrumb,
@@ -27,8 +27,32 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { ImUserPlus } from "react-icons/im";
 import { IoFilter, IoHome } from "react-icons/io5";
 import ModalCustomer from "../ModalCustomer";
+import axios from "axios";
+import { useHistory } from "react-router";
 
 function Customer() {
+  const [customers, setCustomers] = useState();
+  const history = useHistory();
+
+  useEffect(() => {
+    const list = async () => {
+      try {
+        const { data } = await axios.get(
+          "https://xtendid.herokuapp.com/api/customers",
+          {}
+        );
+        setCustomers(data.data);
+        history.push("/customer/list");
+      } catch (err) {
+        if (err.response.data.message === "No Customer in database") {
+          history.push("/customer");
+        }
+      }
+    };
+
+    list();
+  }, [history]);
+
   return (
     <div>
       <TopBar />
@@ -72,9 +96,7 @@ function Customer() {
                     aria-label="Add to friends"
                     icon={<AddIcon />}
                   />
-                  <Button boxShadow="md" mr="px">
-                    Add Customer
-                  </Button>
+                  <ModalCustomer />
                 </ButtonGroup>
               </Stack>
             </Box>

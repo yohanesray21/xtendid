@@ -56,15 +56,19 @@ function StockList() {
 
   const removeData = (id) => {
     const url = "https://xtendid.herokuapp.com/api/item-delete";
-    alert("Are you sure to delete this item ?");
-    axios.delete(`${url}/${id}`).then((response) => {
-      const del = results.filter((result) => id !== result.id);
-      setResults(del);
-      console.log("response", response);
-      if (del.length < 1) {
-        history.push("/stock/item");
-      }
-    });
+    const confirmation = window.confirm(
+      "Are you sure to delete this item ? this proccess cannot be undone."
+    );
+    if (confirmation) {
+      axios.delete(`${url}/${id}`).then((response) => {
+        const del = results.filter((result) => id !== result.id);
+        setResults(del);
+        console.log("response", response);
+        if (del.length < 1) {
+          history.push("/stock/item");
+        }
+      });
+    }
   };
 
   // const updateData = (id) => {

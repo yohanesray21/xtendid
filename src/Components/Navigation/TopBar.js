@@ -82,8 +82,7 @@ function TopBar() {
                     <MenuList>
                       <MenuItem
                         onClick={() => {
-                          localStorage.removeItem("authToken");
-                          history.push("/login");
+                          history.push("/profile");
                         }}
                       >
                         My Account

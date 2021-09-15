@@ -22,6 +22,7 @@ import {
   Th,
   Tbody,
   Td,
+  Badge,
 } from "@chakra-ui/react";
 
 import TopBar from "../../Navigation/TopBar";
@@ -31,39 +32,52 @@ import { IoHome } from "react-icons/io5";
 import { useParams, useHistory } from "react-router-dom";
 
 import axios from "axios";
-import { BsCheck, BsCheckBox, BsCheckCircle } from "react-icons/bs";
+import { set } from "js-cookie";
+import { BsCheckCircle } from "react-icons/bs";
 
 function StockOut() {
   const history = useHistory();
 
   const [address, setAddress] = useState("");
   const [customer, setCustomer] = useState("");
-  const [stockOutId, setStockOutId] = useState("");
   const [schedule, setSchedule] = useState("");
   const [deadline, setDeadline] = useState("");
   const [sourceDocument, setSourceDocument] = useState("");
+  const [item, setItem] = useState({});
   const [items, setItems] = useState([]);
   const [description, setDescription] = useState("");
+  const [validationStatus, setValidationStatus] = useState("");
 
   const [isLoadingStockOut, setIsLoadingStockOut] = useState(false);
 
   const params = useParams();
-  const stockOutIdSaved = params.id;
+  const stockOutId = params.stock_out_id;
+  const SalesOrderId = params.id;
+
+  console.log(item);
 
   useEffect(() => {
-    const lastStockId = async () => {
+    const listStockOut = async () => {
       const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/stock-out-get-lastid"
+        "https://xtendid.herokuapp.com/api/stock-out-get"
       );
-      setStockOutId(data.data.last_id);
+
+      const stockOutFound = data.data.find((stockOut) => {
+        return stockOut.id + "" === stockOutId;
+      });
+
+      setItem(stockOutFound);
+      setSchedule(stockOutFound.schedule);
+      setDeadline(stockOutFound.deadline);
+      setValidationStatus(stockOutFound.status);
     };
-    lastStockId();
+    listStockOut();
   }, []);
 
   useEffect(() => {
-    const StockOutInitiate = async () => {
+    const StockOutInitiateSaved = async () => {
       const { data } = await axios.get(
-        `https://xtendid.herokuapp.com/api/stock-out-initiate/${stockOutIdSaved}`
+        `https://xtendid.herokuapp.com/api/stock-out-initiate/${SalesOrderId}`
       );
 
       setCustomer(data.data.customer.name);
@@ -71,87 +85,39 @@ function StockOut() {
       setSourceDocument(data.data.so.id);
       setItems(data.data.item_so);
     };
-    StockOutInitiate();
-  }, [stockOutIdSaved]);
+    StockOutInitiateSaved();
+  }, [SalesOrderId]);
 
-  const handleOnSave = async () => {
+  const handleOnValidate = async () => {
     setIsLoadingStockOut(true);
-    try {
-      const confirmation = window.confirm(
-        "Are you sure to send this Sales Order?"
+    const confirmation = window.confirm(
+      "Are you sure the Item sent is complete?"
+    );
+
+    if (confirmation) {
+      await axios.get(
+        `https://xtendid.herokuapp.com/api/stock-out-validate/${stockOutId}`
       );
-
-      if (confirmation) {
-        const confirm = window.confirm(
-          "Are you sure to send this Sales Order? This process cannot be undone."
-        );
-
-        if (confirm) {
-          await axios.post(
-            "https://xtendid.herokuapp.com/api/stock-out-store",
-            {},
-            {
-              params: {
-                s_out_id: `OUT-00${stockOutId + 1}`,
-                delivery_address: address,
-                schedule: schedule,
-                deadline: deadline,
-                source_document: sourceDocument,
-                description: description,
-              },
-            }
-          );
-          setIsLoadingStockOut(false);
-          history.push(
-            `/sales/sales-order/${stockOutIdSaved}/delivery/${
-              stockOutId + 1
-            }/validation`
-          );
-        }
-
-        if (!confirm) {
-          history.push(`/sales/sales-order/${stockOutIdSaved}/delivery/`);
-          setIsLoadingStockOut(false);
-        }
-      } else {
-        setIsLoadingStockOut(false);
-      }
-    } catch (err) {
-      alert("The schedule and Deadline field is required.");
-      history.push(`/sales/sales-order/${stockOutIdSaved}/delivery/`);
-      setIsLoadingStockOut(false);
     }
+
+    setIsLoadingStockOut(false);
+    alert("Sales Order Validated");
+    window.location.reload();
+    // history.push(`/sales/sales-order/${stockOutId}/validation`);
   };
-
-  // const handleOnSave = async () => {
-  //   setIsLoadingCreateSO(true);
-
-  //   await axios.patch(
-  //     `https://xtendid.herokuapp.com/api/so-change/${stockOutIdSaved}`,
-  //     {},
-  //     {
-  //       params: {
-  //         // so_id: `SO-00${stockOutIdSaved + 1}`,
-  //       },
-  //     }
-  //   );
-
-  //   setIsLoadingCreateSO(false);
-  //   alert("Edit SO Successful");
-  // };
 
   return (
     <>
       <TopBar />
       <Box bg="white" w="full" mt={4}>
         <Container maxW="container.xl" pt={2}>
-          <Flex justifyContent="space-between" alignItems="center">
+          <Flex justifyContent="space-between" alignItem="center">
             <Box>
               <Breadcrumb
                 fontWeight="medium"
                 fontSize="xl"
                 separator={<ChevronRightIcon color="gray.500" fontSize="3xl" />}
-                alignItems="center"
+                alignItem="center"
               >
                 <BreadcrumbItem>
                   <BreadcrumbLink href="#">
@@ -175,24 +141,20 @@ function StockOut() {
 
             <Box>
               <Stack direction="row" spacing={2}>
-                <Button
-                  size="sm"
-                  boxShadow="sm"
-                  colorScheme="teal"
-                  onClick={handleOnSave}
-                  isLoading={isLoadingStockOut}
-                >
-                  Save
-                </Button>
-                <Button
-                  size="sm"
-                  boxShadow="sm"
-                  colorScheme="blue"
-                  leftIcon={<BsCheckCircle />}
-                  onClick={() => alert("Save the changes first")}
-                >
-                  Validation
-                </Button>
+                {validationStatus === "Not Validated" ? (
+                  <Button
+                    size="sm"
+                    boxShadow="sm"
+                    colorScheme="blue"
+                    leftIcon={<BsCheckCircle />}
+                    onClick={handleOnValidate}
+                    isLoading={isLoadingStockOut}
+                  >
+                    Validate
+                  </Button>
+                ) : (
+                  " "
+                )}
               </Stack>
             </Box>
           </Flex>
@@ -212,7 +174,16 @@ function StockOut() {
               Item Validation
             </Heading>
             <Heading size="xl" fontWeight="semibold" pl={3} pb={2}>
-              XTEND/OUT/OUT-00{stockOutId + 1}
+              XTEND/OUT/OUT-00{stockOutId}
+              {validationStatus === "Validated" ? (
+                <Badge ml="1" fontSize="0.7em" colorScheme="green">
+                  Validated
+                </Badge>
+              ) : (
+                <Badge ml="1" fontSize="0.7em" colorScheme="red">
+                  Not Validated
+                </Badge>
+              )}
             </Heading>
             <Box pb={2}>
               <hr />
@@ -250,6 +221,7 @@ function StockOut() {
                         value={schedule}
                         onChange={(evt) => setSchedule(evt.target.value)}
                         required
+                        pointerEvents="none"
                       />
                     </FormControl>
                   </HStack>
@@ -281,6 +253,7 @@ function StockOut() {
                         value={deadline}
                         onChange={(evt) => setDeadline(evt.target.value)}
                         Required
+                        pointerEvents="none"
                       />
                     </FormControl>
                   </HStack>

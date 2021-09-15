@@ -33,14 +33,15 @@ import {
 import TopBar from "../../Navigation/TopBar";
 import AddSalesItem from "./AddSalesItem";
 
-import { ChevronRightIcon } from "@chakra-ui/icons";
-import { IoHome } from "react-icons/io5";
+import { ChevronRightIcon, ViewIcon } from "@chakra-ui/icons";
+import { IoDocumentOutline, IoHome } from "react-icons/io5";
 import { BsTrash } from "react-icons/bs";
-import { FaTruck } from "react-icons/fa";
+import { FaOpenid, FaRegMoneyBillAlt, FaTruck } from "react-icons/fa";
 
 import { useParams, useHistory } from "react-router-dom";
 
 import axios from "axios";
+import { set } from "js-cookie";
 
 function SalesOrderSaved() {
   const [isEdit, setIsEdit] = useState(false);
@@ -53,6 +54,8 @@ function SalesOrderSaved() {
   const [customer, setCustomer] = useState("");
   const [expirationDate, setExpirationDate] = useState("");
   const [paymentTerm, setPaymentTerm] = useState("");
+  const [deliveryStatus, setDeliveryStatus] = useState("");
+  const [deliveryDocument, setDeliveryDocument] = useState("");
   const [isLoadingCreateSO, setIsLoadingCreateSO] = useState(false);
 
   const params = useParams();
@@ -83,6 +86,8 @@ function SalesOrderSaved() {
       setCustomer(orderFound.customer_id);
       setExpirationDate(orderFound.expiration_date.split(" ")[0]);
       setPaymentTerm(orderFound.due_date);
+      setDeliveryStatus(orderFound.delivery_status);
+      setDeliveryDocument(orderFound.delivery_document);
     };
     listSO();
   }, []);
@@ -100,27 +105,52 @@ function SalesOrderSaved() {
   }, []);
 
   const handleOnSave = async () => {
-    setIsLoadingCreateSO(true);
+    if (isEdit) {
+      const confirm = window.confirm("Are you sure you saved the changes ?");
+      if (confirm) {
+        setIsEdit(false);
+        setIsLoadingCreateSO(true);
 
-    await axios.patch(
-      `https://xtendid.herokuapp.com/api/so-change/${orderIdSaved}`,
-      {},
-      {
-        params: {
-          // so_id: `SO-00${orderIdSaved + 1}`,
-          customer_id: customerId.id,
-          expiration_date: expirationDate,
-          due_date: paymentTerm,
-          total_price_with_tax: calculate.total_price_with_tax,
-          total_tax: calculate.total_tax,
-          total_price: calculate.total_price,
-        },
+        await axios.patch(
+          `https://xtendid.herokuapp.com/api/so-change/${orderIdSaved}`,
+          {},
+          {
+            params: {
+              // so_id: `SO-00${orderIdSaved + 1}`,
+              customer_id: customerId.id,
+              expiration_date: expirationDate,
+              due_date: paymentTerm,
+              total_price_with_tax: calculate.total_price_with_tax,
+              total_tax: calculate.total_tax,
+              total_price: calculate.total_price,
+            },
+          }
+        );
+        alert("Edit SO Successful");
+        setIsEdit(false);
       }
-    );
+    } else {
+      setIsLoadingCreateSO(true);
 
+      await axios.patch(
+        `https://xtendid.herokuapp.com/api/so-change/${orderIdSaved}`,
+        {},
+        {
+          params: {
+            // so_id: `SO-00${orderIdSaved + 1}`,
+            customer_id: customerId.id,
+            expiration_date: expirationDate,
+            due_date: paymentTerm,
+            total_price_with_tax: calculate.total_price_with_tax,
+            total_tax: calculate.total_tax,
+            total_price: calculate.total_price,
+          },
+        }
+      );
+      alert("Edit SO Successful");
+      setIsEdit(false);
+    }
     setIsLoadingCreateSO(false);
-    setIsEdit(false);
-    alert("Edit SO Successful");
   };
 
   const renderedItem = items.map((item) => {
@@ -142,14 +172,18 @@ function SalesOrderSaved() {
               );
 
               if (confirmation) {
-                await axios.delete(
-                  `https://xtendid.herokuapp.com/api/item-so-delete/${item.id}`
-                );
+                if (isEdit) {
+                  await axios.delete(
+                    `https://xtendid.herokuapp.com/api/item-so-delete/${item.id}`
+                  );
 
-                const url = `https://xtendid.herokuapp.com/api/item-so-get/${orderIdSaved}`;
-                const { data: listData } = await axios.get(url, {});
-                setItems(listData.data);
-                setCalculate(listData.param);
+                  const url = `https://xtendid.herokuapp.com/api/item-so-get/${orderIdSaved}`;
+                  const { data: listData } = await axios.get(url, {});
+                  setItems(listData.data);
+                  setCalculate(listData.param);
+                } else {
+                  alert("Item can not be deleted, please click edit");
+                }
               }
             }}
           />
@@ -207,35 +241,70 @@ function SalesOrderSaved() {
                 >
                   Confirm Order
                 </Button>  */}
-                <Button
-                  size="sm"
-                  boxShadow="sm"
-                  colorScheme="blue"
-                  onClick={() => {
-                    setIsEdit((isEdit) => !isEdit);
-                  }}
-                >
-                  {isEdit ? "Cancel Edit" : "Edit"}
-                </Button>
-                <Button
-                  leftIcon={<FaTruck />}
-                  size="sm"
-                  boxShadow="sm"
-                  onClick={() => {
-                    history.push(`/sales/sales-order/${orderIdSaved}/delivery`);
-                  }}
-                >
-                  Delivery
-                </Button>
-                <Button
-                  size="sm"
-                  colorScheme="teal"
-                  boxShadow="sm"
-                  onClick={handleOnSave}
-                  isLoading={isLoadingCreateSO}
-                >
-                  Save
-                </Button>
+
+                {deliveryStatus === "Not Delivered Yet" ? (
+                  <>
+                    <Button
+                      size="sm"
+                      boxShadow="sm"
+                      colorScheme="blue"
+                      onClick={() => {
+                        setIsEdit((isEdit) => !isEdit);
+                      }}
+                    >
+                      {isEdit ? "Cancel Edit" : "Edit"}
+                    </Button>
+                    <Button
+                      leftIcon={<FaTruck />}
+                      size="sm"
+                      boxShadow="sm"
+                      onClick={() => {
+                        if (!isEdit) {
+                          history.push(
+                            `/sales/sales-order/${orderIdSaved}/delivery`
+                          );
+                        } else {
+                          alert("Edit Sales Order is On, Please Save");
+                        }
+                      }}
+                    >
+                      Delivery
+                    </Button>
+                    <Button
+                      size="sm"
+                      colorScheme="teal"
+                      boxShadow="sm"
+                      onClick={handleOnSave}
+                      isLoading={isLoadingCreateSO}
+                    >
+                      Save
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      leftIcon={<IoDocumentOutline />}
+                      size="sm"
+                      boxShadow="sm"
+                      onClick={() => {
+                        history.push(
+                          `/sales/sales-order/${orderIdSaved}/delivery/${deliveryDocument}/validation`
+                        );
+                      }}
+                    >
+                      View Delivery
+                    </Button>
+                    <Button
+                      leftIcon={<FaRegMoneyBillAlt />}
+                      size="sm"
+                      boxShadow="sm"
+                      colorScheme="teal"
+                    >
+                      Create Bill
+                    </Button>
+                  </>
+                )}
+
                 {/* <ModalDetailDelivery /> */}
               </Stack>
             </Box>
@@ -356,11 +425,15 @@ function SalesOrderSaved() {
 
                     <Tr>
                       <Td>
-                        <AddSalesItem
-                          salesId={orderIdSaved}
-                          setListItemOrder={setItems}
-                          setTotalItemOrder={setCalculate}
-                        />
+                        {isEdit ? (
+                          <AddSalesItem
+                            salesId={orderIdSaved}
+                            setListItemOrder={setItems}
+                            setTotalItemOrder={setCalculate}
+                          />
+                        ) : (
+                          " "
+                        )}
                       </Td>
 
                       <Td></Td>

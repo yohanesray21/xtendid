@@ -81,6 +81,8 @@ function ModalCustomer({ buttonText, setListCustomers }) {
         setGetCustomerId(response.data.data.last_id);
       });
 
+    alert("Add New Customer Successfull");
+
     onClose();
   };
 

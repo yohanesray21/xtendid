@@ -36,36 +36,39 @@ import moment from "moment";
 function SalesList() {
   const history = useHistory();
 
-  const [sales, setSales] = useState([]);
+  const [stocksOut, setStocksOut] = useState([]);
 
   useEffect(() => {
-    axios.get("https://xtendid.herokuapp.com/api/so-get").then((response) => {
-      setSales(response.data.data);
-    });
+    axios
+      .get("https://xtendid.herokuapp.com/api/stock-out-get")
+      .then((response) => {
+        setStocksOut(response.data.data);
+      });
   }, []);
 
-  const renderSales = sales.map((sale, index) => {
+  const renderStockOut = stocksOut.map((stock, index) => {
     return (
-      <Tbody key={sale.id}>
+      <Tbody key={stock.id}>
         <Tr>
           <Td>{index + 1}</Td>
           <Td
             onClick={() => {
-              history.push(`/sales/sales-order/${sale.id}`);
+              history.push(
+                `/sales/sales-order/${stock.source_document}/delivery/${stock.id}/validation`
+              );
             }}
             cursor="pointer"
             fontWeight="bold"
           >
-            {sale.so_id}
+            {stock.s_out_id}
           </Td>
-          <Td>{moment(sale.created_at).format("DD-MM-YYYY")}</Td>
-          <Td>{sale.customer}</Td>
-          <Td>{sale.created_by}</Td>
-          <Td>Rp.{sale.total_price_with_tax},-</Td>
-          <Td color={sale.payment_status === "Not Paid Yet" ? "red" : "teal"}>
-            {sale.payment_status}
+          <Td>SO-00{stock.source_document}</Td>
+          <Td>{stock.schedule}</Td>
+          <Td>{stock.deadline}</Td>
+          <Td>Rp.{stock.delivery_address},-</Td>
+          <Td color={stock.status === "Not Validated" ? "red" : "teal"}>
+            {stock.status}
           </Td>
-          <Td>{sale.status}</Td>
         </Tr>
       </Tbody>
     );
@@ -91,9 +94,14 @@ function SalesList() {
                   </Link>
                 </BreadcrumbItem>
 
-                <BreadcrumbItem isCurrentPage>
+                <BreadcrumbItem>
                   <Link to="/sales">
                     <BreadcrumbLink as="span">Sales</BreadcrumbLink>
+                  </Link>
+                </BreadcrumbItem>
+                <BreadcrumbItem>
+                  <Link to="/stock-out/list">
+                    <BreadcrumbLink as="span">Stock Out</BreadcrumbLink>
                   </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
@@ -168,16 +176,15 @@ function SalesList() {
                 <Thead>
                   <Tr>
                     <Th>No</Th>
-                    <Th>Transaction Code</Th>
-                    <Th>Date</Th>
-                    <Th>Customer</Th>
-                    <Th>Created By</Th>
-                    <Th>Total</Th>
-                    <Th>Payment Status</Th>
+                    <Th>Stock Out Code</Th>
+                    <Th>Source Document</Th>
+                    <Th>Schedule</Th>
+                    <Th>Deadline</Th>
+                    <Th>Address</Th>
                     <Th>Status</Th>
                   </Tr>
                 </Thead>
-                {renderSales}
+                {renderStockOut}
               </Table>
             </Box>
           </Box>

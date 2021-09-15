@@ -115,7 +115,7 @@ function StockNewItem() {
       }
     );
     setIsLoadingUpdateItem(false);
-    alert("Update Berhasil");
+    alert("Update Successful");
     history.push("/stock/list");
   };
 

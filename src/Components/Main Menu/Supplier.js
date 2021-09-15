@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import {
   Box,
   Breadcrumb,
@@ -27,7 +27,30 @@ import { AddIcon, ChevronRightIcon } from "@chakra-ui/icons";
 import { ImUserPlus } from "react-icons/im";
 import { IoFilter, IoHome } from "react-icons/io5";
 import ModalSupplier from "../ModalSupplier";
+import { useHistory } from "react-router";
+import axios from "axios";
 function Supplier() {
+  const [suppliers, setSuppliers] = useState([]);
+  const history = useHistory();
+
+  useEffect(() => {
+    const url = "https://xtendid.herokuapp.com/api/suppliers";
+
+    const list = async () => {
+      try {
+        const { data } = await axios.get(url, {});
+        setSuppliers(data.data);
+        history.push("/supplier/list");
+      } catch (err) {
+        if (err.response.data.message === "No Supplier in database") {
+          history.push("/supplier");
+        }
+      }
+    };
+
+    list();
+  }, [history]);
+
   return (
     <div>
       <TopBar />

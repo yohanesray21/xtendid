@@ -33,39 +33,36 @@ import { IoFilter, IoHome } from "react-icons/io5";
 import axios from "axios";
 import moment from "moment";
 
-function SalesList() {
+function PurchaseList() {
   const history = useHistory();
 
-  const [sales, setSales] = useState([]);
+  const [purchase, setPurchase] = useState([]);
 
   useEffect(() => {
-    axios.get("https://xtendid.herokuapp.com/api/so-get").then((response) => {
-      setSales(response.data.data);
+    axios.get("https://xtendid.herokuapp.com/api/po-get").then((response) => {
+      setPurchase(response.data.data);
     });
   }, []);
 
-  const renderSales = sales.map((sale, index) => {
+  const renderPurchase = purchase.map((purchase, index) => {
     return (
-      <Tbody key={sale.id}>
+      <Tbody key={purchase.id}>
         <Tr>
           <Td>{index + 1}</Td>
           <Td
             onClick={() => {
-              history.push(`/sales/sales-order/${sale.id}`);
+              history.push(`/purchase/purchase-order/${purchase.id}`);
             }}
             cursor="pointer"
-            fontWeight="bold"
           >
-            {sale.so_id}
+            {purchase.po_id}
           </Td>
-          <Td>{moment(sale.created_at).format("DD-MM-YYYY")}</Td>
-          <Td>{sale.customer}</Td>
-          <Td>{sale.created_by}</Td>
-          <Td>Rp.{sale.total_price_with_tax},-</Td>
-          <Td color={sale.payment_status === "Not Paid Yet" ? "red" : "teal"}>
-            {sale.payment_status}
-          </Td>
-          <Td>{sale.status}</Td>
+          <Td>{moment(purchase.created_at).format("DD-MM-YYYY")}</Td>
+          <Td>{purchase.supplier}</Td>
+          <Td>{purchase.created_by}</Td>
+          <Td>Rp.{purchase.total_price_with_tax},-</Td>
+          <Td>{purchase.payment_status}</Td>
+          <Td>{purchase.status}</Td>
         </Tr>
       </Tbody>
     );
@@ -92,8 +89,8 @@ function SalesList() {
                 </BreadcrumbItem>
 
                 <BreadcrumbItem isCurrentPage>
-                  <Link to="/sales">
-                    <BreadcrumbLink as="span">Sales</BreadcrumbLink>
+                  <Link to="/purchase">
+                    <BreadcrumbLink as="span">Purchase</BreadcrumbLink>
                   </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
@@ -116,9 +113,9 @@ function SalesList() {
 
                 <ButtonGroup colorScheme="teal" size="sm" isAttached>
                   <IconButton boxShadow="md" icon={<AddIcon />} />
-                  <Link to="/sales/sales-order">
+                  <Link to="/purchase/purchase-order">
                     <Button colorScheme="teal" size="sm">
-                      Add New Sales
+                      Add New Purchase
                     </Button>
                   </Link>
                 </ButtonGroup>
@@ -170,14 +167,14 @@ function SalesList() {
                     <Th>No</Th>
                     <Th>Transaction Code</Th>
                     <Th>Date</Th>
-                    <Th>Customer</Th>
+                    <Th>Supplier</Th>
                     <Th>Created By</Th>
                     <Th>Total</Th>
                     <Th>Payment Status</Th>
                     <Th>Status</Th>
                   </Tr>
                 </Thead>
-                {renderSales}
+                {renderPurchase}
               </Table>
             </Box>
           </Box>
@@ -187,4 +184,4 @@ function SalesList() {
   );
 }
 
-export default SalesList;
+export default PurchaseList;
