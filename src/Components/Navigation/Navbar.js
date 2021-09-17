@@ -125,7 +125,7 @@ function Navbar() {
             </Link> */}
           </Stack>
 
-          <Text fontSize="md" pl={3} pt={5} color="gray.500">
+          {/* <Text fontSize="md" pl={3} pt={5} color="gray.500">
             Settings
           </Text>
           <Box p={2}>
@@ -149,7 +149,7 @@ function Navbar() {
                 </Text>
               </HStack>
             </Link>
-          </Stack>
+          </Stack> */}
         </Box>
       </div>
     </>
