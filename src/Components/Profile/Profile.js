@@ -88,8 +88,8 @@ function Profile() {
                       borderColor="gray.200"
                       boxSize="150px"
                       border="indigo"
-                      src="https://bit.ly/sage-adebayo"
-                      alt="Segun Adebayo"
+                      src="https://upload.wikimedia.org/wikipedia/commons/9/99/Sample_User_Icon.png"
+                      alt="Profile Picture"
                     />
                     <Text fontSize={30} fontWeight="bold">
                       {fullName}

@@ -65,7 +65,7 @@ function SalesList() {
           <Td>SO-00{stock.source_document}</Td>
           <Td>{stock.schedule}</Td>
           <Td color="green">{stock.deadline}</Td>
-          <Td>Rp.{stock.delivery_address},-</Td>
+          <Td>{stock.delivery_address},-</Td>
           <Td>{stock.item_out} item</Td>
         </Tr>
       </Tbody>

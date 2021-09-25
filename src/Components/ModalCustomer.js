@@ -311,11 +311,11 @@ function ModalCustomer({ buttonText, setListCustomers }) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Link to="/customer/detail">
+                {/* <Link to="/customer/detail">
                   <Button size="sm" mr={3} leftIcon={<BiEdit />}>
                     Edit in Full Page
                   </Button>
-                </Link>
+                </Link> */}
                 <Box>
                   <Button
                     colorScheme="teal"
