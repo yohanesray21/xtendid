@@ -97,7 +97,7 @@ function SalesList() {
                 </BreadcrumbItem>
                 <BreadcrumbItem>
                   <Link to="/stock-out/list">
-                    <BreadcrumbLink as="span">Stock Out</BreadcrumbLink>
+                    <BreadcrumbLink as="span">Invoice</BreadcrumbLink>
                   </Link>
                 </BreadcrumbItem>
                 <BreadcrumbItem isCurrentPage>
