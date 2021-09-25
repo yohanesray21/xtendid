@@ -25,8 +25,10 @@ import { IoNotifications, IoSearchOutline } from "react-icons/io5";
 
 import Logo from "../../assets/images/logo.png";
 import User from "../../assets/images/user.jpeg";
+import { AiOutlineUser } from "react-icons/ai";
 import { Link, useHistory } from "react-router-dom";
 import Cookies from "js-cookie";
+import axios from "axios";
 
 function TopBar() {
   const history = useHistory();
@@ -72,7 +74,11 @@ function TopBar() {
                       <Center>
                         <Wrap>
                           <WrapItem>
-                            <Avatar src={User} size="sm" name="user">
+                            <Avatar
+                              size="sm"
+                              icon={<AiOutlineUser fontSize="1.5rem" />}
+                              name="user"
+                            >
                               <AvatarBadge boxSize="1.25em" bg="green.500" />
                             </Avatar>
                           </WrapItem>
@@ -88,7 +94,10 @@ function TopBar() {
                         My Account
                       </MenuItem>
                       <MenuItem
-                        onClick={() => {
+                        onClick={async () => {
+                          await axios.get(
+                            "https://xtendid.herokuapp.com/api/logout"
+                          );
                           Cookies.remove("authToken");
                           history.push("/login");
                         }}

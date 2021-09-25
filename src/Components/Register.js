@@ -163,6 +163,7 @@ function Register(props) {
                       <option>CEO</option>
                       <option>General Manager</option>
                       <option>Admin</option>
+                      <option>IT Staff</option>
                     </Select>
                   </FormControl>
                   <FormControl id="email" isRequired>

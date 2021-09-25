@@ -1,7 +1,22 @@
 import React from "react";
 import ReactDOM from "react-dom";
-import App from "./App";
+import axios from "axios";
 import { ChakraProvider } from "@chakra-ui/react";
+import Cookies from "js-cookie";
+
+import App from "./App";
+
+axios.interceptors.request.use(
+  function (config) {
+    config.headers.Authorization = "Bearer " + Cookies.get("authToken");
+    // Do something before request is sent
+    return config;
+  },
+  function (error) {
+    // Do something with request error
+    return Promise.reject(error);
+  }
+);
 
 ReactDOM.render(
   <React.StrictMode>

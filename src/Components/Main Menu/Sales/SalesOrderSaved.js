@@ -28,20 +28,20 @@ import {
   Spacer,
   VStack,
   Divider,
+  Badge,
 } from "@chakra-ui/react";
 
 import TopBar from "../../Navigation/TopBar";
 import AddSalesItem from "./AddSalesItem";
 
-import { ChevronRightIcon, ViewIcon } from "@chakra-ui/icons";
+import { ChevronRightIcon } from "@chakra-ui/icons";
 import { IoDocumentOutline, IoHome } from "react-icons/io5";
 import { BsTrash } from "react-icons/bs";
-import { FaOpenid, FaRegMoneyBillAlt, FaTruck } from "react-icons/fa";
+import { FaRegMoneyBillAlt, FaTruck } from "react-icons/fa";
 
 import { useParams, useHistory } from "react-router-dom";
 
 import axios from "axios";
-import { set } from "js-cookie";
 
 function SalesOrderSaved() {
   const [isEdit, setIsEdit] = useState(false);
@@ -56,6 +56,7 @@ function SalesOrderSaved() {
   const [paymentTerm, setPaymentTerm] = useState("");
   const [deliveryStatus, setDeliveryStatus] = useState("");
   const [deliveryDocument, setDeliveryDocument] = useState("");
+  const [validationStatus, setValidationStatus] = useState("");
   const [isLoadingCreateSO, setIsLoadingCreateSO] = useState(false);
 
   const params = useParams();
@@ -299,8 +300,13 @@ function SalesOrderSaved() {
                       size="sm"
                       boxShadow="sm"
                       colorScheme="teal"
+                      onClick={() => {
+                        history.push(
+                          `/sales/sales-order/${orderIdSaved}/invoice`
+                        );
+                      }}
                     >
-                      Create Bill
+                      Create invoice
                     </Button>
                   </>
                 )}
@@ -326,6 +332,15 @@ function SalesOrderSaved() {
             </Heading>
             <Heading size="xl" fontWeight="semibold" pl={3} pb={2}>
               SO-00{orderIdSaved}
+              {deliveryStatus === "Stock Out Created" ? (
+                <Badge ml="1" fontSize="0.7em" colorScheme="green">
+                  Delivered
+                </Badge>
+              ) : (
+                <Badge ml="1" fontSize="0.7em" colorScheme="red">
+                  Not Delivered
+                </Badge>
+              )}
             </Heading>
             <Box pb={2}>
               <hr />

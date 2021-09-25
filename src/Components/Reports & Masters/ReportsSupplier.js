@@ -1,6 +1,7 @@
 import { Box, Heading, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { MdDashboard } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 function ReportsSales() {
   return (
@@ -25,18 +26,20 @@ function ReportsSales() {
         </Box>
 
         <Stack p={3}>
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Supplier
-            </Text>
-          </HStack>
+          <Link to="supplier">
+            <HStack
+              p={2}
+              borderRadius="md"
+              _hover={{ bgColor: "teal", color: "white" }}
+              bgColor="white"
+              cursor="pointer"
+            >
+              <Icon as={MdDashboard} />
+              <Text fontSize="md" pl={2}>
+                Supplier
+              </Text>
+            </HStack>
+          </Link>
         </Stack>
       </Box>
     </>

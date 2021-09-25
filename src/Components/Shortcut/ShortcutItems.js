@@ -4,20 +4,7 @@ import React, { useEffect, useState } from "react";
 import { FaBox } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
-function Items() {
-  const url = "https://xtendid.herokuapp.com/api/item-count";
-
-  const [results, setResults] = useState([]);
-
-  useEffect(() => {
-    const list = async () => {
-      const { data } = await axios.get(url, {});
-      setResults(data.data);
-      console.log(results);
-    };
-
-    list();
-  }, []);
+function Items({ countItem }) {
   return (
     <>
       <Link to="/stock/item">
@@ -38,7 +25,7 @@ function Items() {
           </Center>
           <Box>
             <Text fontSize="xl">
-              <Center>{results.total_item}</Center>
+              <Center>{countItem}</Center>
             </Text>
             <Text>
               <Center>Items</Center>

@@ -36,37 +36,35 @@ import moment from "moment";
 function SalesList() {
   const history = useHistory();
 
-  const [stocksOut, setStocksOut] = useState([]);
+  const [invoice, setInvoice] = useState([]);
 
   useEffect(() => {
-    axios
-      .get("https://xtendid.herokuapp.com/api/stock-out-get")
-      .then((response) => {
-        setStocksOut(response.data.data);
-      });
+    axios.get("https://xtendid.herokuapp.com/api/invoices").then((response) => {
+      setInvoice(response.data.data);
+    });
   }, []);
 
-  const renderStockOut = stocksOut.map((stock, index) => {
+  const renderInvoice = invoice.map((inv, index) => {
     return (
-      <Tbody key={stock.id}>
+      <Tbody key={inv.id}>
         <Tr>
           <Td>{index + 1}</Td>
           <Td
             onClick={() => {
-              history.push(
-                `/sales/sales-order/${stock.source_document}/delivery/${stock.id}/validation`
-              );
+              history.push(`/sales/sales-order/${inv.source_document}/invoice`);
             }}
             cursor="pointer"
             fontWeight="bold"
           >
-            {stock.s_out_id}
+            {inv.invoice_id}
           </Td>
-          <Td>SO-00{stock.source_document}</Td>
-          <Td>{stock.schedule}</Td>
-          <Td color="green">{stock.deadline}</Td>
-          <Td>Rp.{stock.delivery_address},-</Td>
-          <Td>{stock.item_out} item</Td>
+          <Td>SO-00{inv.source_document}</Td>
+          <Td>{inv.paid_amount}</Td>
+          <Td>{inv.due_date}</Td>
+          <Td>Rp.{inv.customer},-</Td>
+          <Td color={inv.status === "Not Paid Yet" ? "red" : "teal"}>
+            {inv.status}
+          </Td>
         </Tr>
       </Tbody>
     );
@@ -179,10 +177,10 @@ function SalesList() {
                     <Th>Schedule</Th>
                     <Th>Deadline</Th>
                     <Th>Address</Th>
-                    <Th>Stock Out</Th>
+                    <Th>Status</Th>
                   </Tr>
                 </Thead>
-                {renderStockOut}
+                {renderInvoice}
               </Table>
             </Box>
           </Box>

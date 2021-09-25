@@ -1,6 +1,7 @@
 import { Box, Heading, HStack, Icon, Stack, Text } from "@chakra-ui/react";
 import React from "react";
 import { MdDashboard } from "react-icons/md";
+import { Link } from "react-router-dom";
 
 function ReportsStock() {
   return (
@@ -28,58 +29,66 @@ function ReportsStock() {
           {window.location.pathname === "/" ||
           window.location.pathname === "/stock" ? (
             <>
-              <HStack
-                p={2}
-                borderRadius="md"
-                _hover={{ bgColor: "teal", color: "white" }}
-                bgColor="white"
-                cursor="pointer"
-              >
-                <Icon as={MdDashboard} />
-                <Text fontSize="md" pl={2}>
-                  Stock In
-                </Text>
-              </HStack>
-              <HStack
-                p={2}
-                borderRadius="md"
-                _hover={{ bgColor: "teal", color: "white" }}
-                bgColor="white"
-                cursor="pointer"
-              >
-                <Icon as={MdDashboard} />
-                <Text fontSize="md" pl={2}>
-                  Stock Out
-                </Text>
-              </HStack>
+              <Link to="/stock">
+                <HStack
+                  p={2}
+                  borderRadius="md"
+                  _hover={{ bgColor: "teal", color: "white" }}
+                  bgColor="white"
+                  cursor="pointer"
+                >
+                  <Icon as={MdDashboard} />
+                  <Text fontSize="md" pl={2}>
+                    Stock
+                  </Text>
+                </HStack>
+              </Link>
+              <Link to="/sales/stock-in/list">
+                <HStack
+                  p={2}
+                  borderRadius="md"
+                  _hover={{ bgColor: "teal", color: "white" }}
+                  bgColor="white"
+                  cursor="pointer"
+                >
+                  <Icon as={MdDashboard} />
+                  <Text fontSize="md" pl={2}>
+                    Stock In
+                  </Text>
+                </HStack>
+              </Link>
+              <Link to="/sales/stock-out/list">
+                <HStack
+                  p={2}
+                  borderRadius="md"
+                  _hover={{ bgColor: "teal", color: "white" }}
+                  bgColor="white"
+                  cursor="pointer"
+                >
+                  <Icon as={MdDashboard} />
+                  <Text fontSize="md" pl={2}>
+                    Stock Out
+                  </Text>
+                </HStack>
+              </Link>
             </>
           ) : (
             " "
           )}
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Item
-            </Text>
-          </HStack>
-          <HStack
-            p={2}
-            borderRadius="md"
-            _hover={{ bgColor: "teal", color: "white" }}
-            bgColor="white"
-            cursor="pointer"
-          >
-            <Icon as={MdDashboard} />
-            <Text fontSize="md" pl={2}>
-              Item Price
-            </Text>
-          </HStack>
+          <Link to="/stock/item">
+            <HStack
+              p={2}
+              borderRadius="md"
+              _hover={{ bgColor: "teal", color: "white" }}
+              bgColor="white"
+              cursor="pointer"
+            >
+              <Icon as={MdDashboard} />
+              <Text fontSize="md" pl={2}>
+                Item
+              </Text>
+            </HStack>
+          </Link>
         </Stack>
       </Box>
     </>

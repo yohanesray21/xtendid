@@ -9,15 +9,29 @@ import {
 } from "@chakra-ui/react";
 
 import { Link } from "react-router-dom";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { FaUserTie } from "react-icons/fa";
 import { RiBankFill } from "react-icons/ri";
 import { HiChartBar } from "react-icons/hi";
 
 import ShortcutCustomer from "./ShortcutCustomer";
 import ShortcutItems from "./ShortcutItems";
+import { IoCart } from "react-icons/io5";
+import axios from "axios";
 
 function ShortcutMaster() {
+  const [count, setCount] = useState({});
+
+  useEffect(() => {
+    const countItem = async () => {
+      const { data } = await axios.get(
+        "https://xtendid.herokuapp.com/api/master-count"
+      );
+      setCount(data.data);
+    };
+
+    countItem();
+  }, []);
   return (
     <div>
       <Box w="full" bg="white">
@@ -25,7 +39,7 @@ function ShortcutMaster() {
           Shortcut
         </Heading>
         <HStack spacing={8} w="full">
-          <ShortcutItems />
+          <ShortcutItems countItem={count.item} />
 
           <Link to="supplier">
             <Stack
@@ -45,7 +59,7 @@ function ShortcutMaster() {
               </Center>
               <Box>
                 <Text fontSize="xl">
-                  <Center>32</Center>
+                  <Center>{count.supplier}</Center>
                 </Text>
                 <Text>
                   <Center>Supplier</Center>
@@ -54,56 +68,60 @@ function ShortcutMaster() {
             </Stack>
           </Link>
 
-          <ShortcutCustomer />
+          <ShortcutCustomer countCustomer={count.customer} />
 
-          <Stack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            px={14}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Center>
-              <Icon fontSize="3xl" as={RiBankFill} />
-            </Center>
-            <Box>
-              <Text fontSize="xl">
-                <Center>3</Center>
-              </Text>
-              <Text>
-                <Center>Banks</Center>
-              </Text>
-            </Box>
-          </Stack>
-          <Stack
-            w="full"
-            border="1px"
-            borderColor="gray.200"
-            py={6}
-            px={14}
-            bgColor="white.100"
-            boxShadow="xs"
-            spacing={4}
-            _hover={{ bgColor: "teal", color: "white" }}
-            borderRadius="md"
-          >
-            <Center>
-              <Icon fontSize="3xl" as={HiChartBar} />
-            </Center>
-            <Box>
-              <Text fontSize="xl">
-                <Center>32</Center>
-              </Text>
-              <Text>
-                <Center>Sales</Center>
-              </Text>
-            </Box>
-          </Stack>
+          <Link to="/purchase/list">
+            <Stack
+              w="full"
+              border="1px"
+              borderColor="gray.200"
+              py={6}
+              px={14}
+              bgColor="white.100"
+              boxShadow="xs"
+              spacing={4}
+              _hover={{ bgColor: "teal", color: "white" }}
+              borderRadius="md"
+            >
+              <Center>
+                <Icon fontSize="3xl" as={IoCart} />
+              </Center>
+              <Box>
+                <Text fontSize="xl">
+                  <Center>{count.purchase_order}</Center>
+                </Text>
+                <Text>
+                  <Center>Purchase</Center>
+                </Text>
+              </Box>
+            </Stack>
+          </Link>
+          <Link to="/sales/list">
+            <Stack
+              w="full"
+              border="1px"
+              borderColor="gray.200"
+              py={6}
+              px={14}
+              bgColor="white.100"
+              boxShadow="xs"
+              spacing={4}
+              _hover={{ bgColor: "teal", color: "white" }}
+              borderRadius="md"
+            >
+              <Center>
+                <Icon fontSize="3xl" as={HiChartBar} />
+              </Center>
+              <Box>
+                <Text fontSize="xl">
+                  <Center>{count.sales_order}</Center>
+                </Text>
+                <Text>
+                  <Center>Sales</Center>
+                </Text>
+              </Box>
+            </Stack>
+          </Link>
         </HStack>
       </Box>
     </div>

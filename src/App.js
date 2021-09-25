@@ -15,6 +15,7 @@ import SalesOrderSaved from "./Components/Main Menu/Sales/SalesOrderSaved";
 import SalesOrderDelivery from "./Components/Main Menu/Sales/SalesOrderDelivery";
 import SalesOrderValidate from "./Components/Main Menu/Sales/SalesOrderValidate";
 import StockOutList from "./Components/Main Menu/Sales/StockOutList";
+import SalesInvoiceList from "./Components/Main Menu/Sales/SalesInvoiceList";
 import Stock from "./Components/Main Menu/Stock/Stock";
 import StockItem from "./Components/Main Menu/Stock/StockItem";
 import StockList from "./Components/Main Menu/Stock/StockList";
@@ -30,6 +31,7 @@ import Profile from "./Components/Profile/Profile";
 
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import CustomerDetail from "./Components/Main Menu/CustomerDetail";
+import SalesInvoice from "./Components/Main Menu/Sales/SalesInvoice";
 
 function App() {
   return (
@@ -87,8 +89,14 @@ function App() {
           >
             <SalesOrderValidate />
           </Route>
+          <Route exact path="/sales/sales-order/:id/invoice">
+            <SalesInvoice />
+          </Route>
           <Route exact path="/sales/stock-out/list">
             <StockOutList />
+          </Route>
+          <Route exact path="/sales/invoice/list">
+            <SalesInvoiceList />
           </Route>
           <Route exact path="/stock">
             <Stock />

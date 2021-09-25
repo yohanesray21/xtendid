@@ -3,12 +3,13 @@ import { Box, Text, Icon, Stack, Heading, HStack } from "@chakra-ui/react";
 import { IoList, IoCart, IoCash, IoSettingsSharp } from "react-icons/io5";
 import { MdDashboard } from "react-icons/md";
 import { FaBox } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 const Navigation = [{ title: "Master Data" }, { title: "Purchase" }];
 
 function Navbar() {
   const [nav, setNav] = useState("");
+  const location = useLocation();
 
   return (
     <>
@@ -125,7 +126,7 @@ function Navbar() {
             </Link> */}
           </Stack>
 
-          {/* <Text fontSize="md" pl={3} pt={5} color="gray.500">
+          <Text fontSize="md" pl={3} pt={5} color="gray.500">
             Settings
           </Text>
           <Box p={2}>
@@ -149,7 +150,7 @@ function Navbar() {
                 </Text>
               </HStack>
             </Link>
-          </Stack> */}
+          </Stack>
         </Box>
       </div>
     </>
