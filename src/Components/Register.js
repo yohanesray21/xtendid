@@ -39,10 +39,15 @@ function Register(props) {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleSubmitRegister = async (evt) => {
-    evt.preventDefault();
-    setIsLoading(true);
-    await register();
-    setIsLoading(false);
+    try {
+      evt.preventDefault();
+      setIsLoading(true);
+      await register();
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      alert("Username or email already exist !");
+    }
 
     // toast({
     //   title: "Account is Created",

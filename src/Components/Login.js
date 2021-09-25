@@ -33,10 +33,15 @@ function Login(props) {
   const history = useHistory();
 
   const handleSubmitLogin = async (evt) => {
-    evt.preventDefault();
-    setIsLoading(true);
-    await login();
-    setIsLoading(false);
+    try {
+      evt.preventDefault();
+      setIsLoading(true);
+      await login();
+      setIsLoading(false);
+    } catch (err) {
+      setIsLoading(false);
+      alert("Incorrect Username or Password !");
+    }
 
     // Real API
 
