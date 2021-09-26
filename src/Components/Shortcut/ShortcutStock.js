@@ -84,7 +84,7 @@ function ShortcutStock() {
                   <Center>{count.stock_out}</Center>
                 </Text>
                 <Text>
-                  <Center w={160}>stock Out</Center>
+                  <Center w={160}>Stock Out</Center>
                 </Text>
               </Box>
             </Stack>

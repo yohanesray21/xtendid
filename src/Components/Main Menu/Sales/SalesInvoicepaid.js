@@ -66,6 +66,7 @@ function SalesInvoice() {
   const [credit, setCredit] = useState("");
   const [status, setStatus] = useState("");
   const [date, setDate] = useState("");
+  const [Edit, setEdit] = useState(false);
   const [description, setDescription] = useState("");
 
   const [isLoadingCreateINV, setIsLoadingCreateINV] = useState(false);
@@ -85,24 +86,6 @@ function SalesInvoice() {
   }, []);
 
   useEffect(() => {
-    const listInv = async () => {
-      const { data } = await axios.get(
-        "https://xtendid.herokuapp.com/api/invoices"
-      );
-      const invoiceFound = data.data.find((data) => {
-        return data.source_document + "" === params.id;
-      });
-
-      setStatus(invoiceFound.status);
-      setDate(data.data.created_at);
-      setDueDate(invoiceFound.due_date);
-      setAmount(invoiceFound.amount);
-      setAccount(invoiceFound.account);
-    };
-    listInv();
-  }, []);
-
-  useEffect(() => {
     const invoiceInitiate = async () => {
       const { data } = await axios.get(
         `https://xtendid.herokuapp.com/api/invoice-initiate/${orderIdSaved}`
@@ -118,6 +101,7 @@ function SalesInvoice() {
       setCredit(data.data.credit);
     };
     invoiceInitiate();
+    setEdit(true);
   }, [orderIdSaved]);
 
   console.log(account);
@@ -144,8 +128,9 @@ function SalesInvoice() {
             },
           }
         );
-        alert("Create Invoice Success");
+        alert("Payment Success");
         setIsLoadingCreateINV(false);
+        setEdit(false);
       } catch (err) {
         if (
           err.response.data.data.due_date === "The due date field is required."
@@ -160,6 +145,23 @@ function SalesInvoice() {
       setIsLoadingCreateINV(false);
     }
   };
+
+  useEffect(() => {
+    const listPO = async () => {
+      const { data } = await axios.get(
+        `https://xtendid.herokuapp.com/api/invoice-find/${invoiceId}`
+      );
+
+      setStatus(data.data.invoice.status);
+      // setDate(data.data.created_at.split("T")[0]);
+      setDueDate(data.data.invoice.due_date);
+      setAmount(data.data.invoice.amount);
+      setAccount(data.data.payment[0].id);
+    };
+
+    listPO();
+    setEdit(false);
+  }, []);
 
   const renderedItem = items.map((item) => {
     return (
@@ -207,20 +209,16 @@ function SalesInvoice() {
 
             <Box>
               <Stack direction="row" spacing={2}>
-                {status === "Paid Off" ? (
-                  ""
-                ) : (
-                  <Button
-                    leftIcon={<BiMoney />}
-                    size="sm"
-                    boxShadow="sm"
-                    colorScheme="teal"
-                    onClick={createInvoice}
-                    isLoading={isLoadingCreateINV}
-                  >
-                    Payment
-                  </Button>
-                )}
+                <Button
+                  leftIcon={<BiMoney />}
+                  size="sm"
+                  boxShadow="sm"
+                  colorScheme="teal"
+                  onClick={createInvoice}
+                  isLoading={isLoadingCreateINV}
+                >
+                  Payment
+                </Button>
 
                 {/* <ModalDetailDelivery /> */}
               </Stack>
@@ -316,7 +314,7 @@ function SalesInvoice() {
                         type="date"
                         value={dueDate}
                         onChange={(evt) => setDueDate(evt.target.value)}
-                        pointerEvents={status === "Paid Off" ? "none" : "fill"}
+                        pointerEvents={Edit ? "fill" : "none"}
                       />
                     </FormControl>
                   </HStack>
@@ -332,7 +330,28 @@ function SalesInvoice() {
                       <Th isNumeric>Total</Th>
                     </Tr>
                   </Thead>
-                  <Tbody>{renderedItem}</Tbody>
+                  <Tbody>
+                    {renderedItem}
+
+                    <Tr>
+                      <Td>
+                        {isEdit ? (
+                          <AddSalesItem
+                            salesId={orderIdSaved}
+                            setListItemOrder={setItems}
+                            setTotalItemOrder={setCalculate}
+                          />
+                        ) : (
+                          " "
+                        )}
+                      </Td>
+
+                      <Td></Td>
+                      <Td></Td>
+                      <Td></Td>
+                      <Td></Td>
+                    </Tr>
+                  </Tbody>
                 </Table>
               </Box>
             </Flex>
@@ -361,7 +380,7 @@ function SalesInvoice() {
                       bgColor="gray.200"
                       value={account}
                       onChange={(evt) => setAccount(evt.target.value)}
-                      pointerEvents={status === "Paid Off" ? "none" : "fill"}
+                      pointerEvents={Edit ? "fill" : "none"}
                     >
                       <option>Select Status</option>
                       {accounts.map((account) => {
@@ -420,9 +439,7 @@ function SalesInvoice() {
                             onChange={(evt) => {
                               setAmount(evt.target.value);
                             }}
-                            pointerEvents={
-                              status === "Paid Off" ? "none" : "fill"
-                            }
+                            pointerEvents={Edit ? "fill" : "none"}
                           />
                         </Td>
                       </Tr>

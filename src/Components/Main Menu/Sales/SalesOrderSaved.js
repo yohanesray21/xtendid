@@ -57,6 +57,7 @@ function SalesOrderSaved() {
   const [deliveryStatus, setDeliveryStatus] = useState("");
   const [deliveryDocument, setDeliveryDocument] = useState("");
   const [validationStatus, setValidationStatus] = useState("");
+  const [invoiceLastId, setInvoiceLastId] = useState("");
   const [isLoadingCreateSO, setIsLoadingCreateSO] = useState(false);
 
   const params = useParams();
@@ -103,6 +104,16 @@ function SalesOrderSaved() {
     };
 
     listCustomer();
+  }, []);
+
+  useEffect(() => {
+    const invoiceLastId = async () => {
+      const { data } = await axios.get(
+        "https://xtendid.herokuapp.com/api/invoice-get-lastid"
+      );
+      setInvoiceLastId(data.data.last_id);
+    };
+    invoiceLastId();
   }, []);
 
   const handleOnSave = async () => {
@@ -302,7 +313,9 @@ function SalesOrderSaved() {
                       colorScheme="teal"
                       onClick={() => {
                         history.push(
-                          `/sales/sales-order/${orderIdSaved}/invoice`
+                          `/sales/sales-order/${orderIdSaved}/invoice/${
+                            invoiceLastId + 1
+                          }`
                         );
                       }}
                     >

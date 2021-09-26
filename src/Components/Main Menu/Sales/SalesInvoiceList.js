@@ -51,7 +51,9 @@ function SalesList() {
           <Td>{index + 1}</Td>
           <Td
             onClick={() => {
-              history.push(`/sales/sales-order/${inv.source_document}/invoice`);
+              history.push(
+                `/sales/sales-order/${inv.source_document}/invoice/${inv.id}`
+              );
             }}
             cursor="pointer"
             fontWeight="bold"
@@ -61,7 +63,7 @@ function SalesList() {
           <Td>SO-00{inv.source_document}</Td>
           <Td>{inv.paid_amount}</Td>
           <Td>{inv.due_date}</Td>
-          <Td>Rp.{inv.customer},-</Td>
+          <Td>{inv.customer},-</Td>
           <Td color={inv.status === "Not Paid Yet" ? "red" : "teal"}>
             {inv.status}
           </Td>

@@ -89,7 +89,7 @@ function App() {
           >
             <SalesOrderValidate />
           </Route>
-          <Route exact path="/sales/sales-order/:id/invoice">
+          <Route exact path="/sales/sales-order/:id/invoice/:invoice_id">
             <SalesInvoice />
           </Route>
           <Route exact path="/sales/stock-out/list">

@@ -17,6 +17,7 @@ import {
   Stack,
   Text,
   useDisclosure,
+  Divider,
 } from "@chakra-ui/react";
 import { BiEdit } from "react-icons/bi";
 import axios from "axios";
@@ -36,7 +37,7 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
   const [zip, setZip] = useState("");
   const [getSupplierId, setGetSupplierId] = useState(null);
 
-  const [isLoadingAddSuppplier, setIsLoadingAddSuppplier] = useState(false);
+  const [isLoadingAddSupplier, setIsLoadingAddSupplier] = useState(false);
 
   useEffect(() => {
     axios
@@ -83,13 +84,13 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
   const handleSubmitSupplier = async (evt) => {
     evt.preventDefault();
     console.log("berhasil");
-    setIsLoadingAddSuppplier(true);
+    setIsLoadingAddSupplier(true);
 
     try {
       await addSupplier();
     } catch (err) {
     } finally {
-      setIsLoadingAddSuppplier(false);
+      setIsLoadingAddSupplier(false);
     }
   };
 
@@ -282,16 +283,17 @@ function ModalSupplier({ buttonText, setListSuppliers }) {
                 justifyContent="space-between"
                 alignItems="center"
               >
-                <Link to="/supplier/detail">
+                {/* <Link to="/supplier/detail">
                   <Button size="sm" mr={3} leftIcon={<BiEdit />}>
                     Edit in Full Page
                   </Button>
-                </Link>
+                </Link> */}
+                <Divider color="white" />
                 <Box>
                   <Button
                     colorScheme="teal"
                     type="submit"
-                    isLoading={isLoadingAddSuppplier}
+                    isLoading={isLoadingAddSupplier}
                   >
                     Save
                   </Button>

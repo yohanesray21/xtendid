@@ -107,6 +107,7 @@ function Profile() {
                       bgColor="gray.100"
                       value={username}
                       onChange={(evt) => setUsername(evt.target.value)}
+                      readOnly
                     />
                   </FormControl>
                   <HStack>
